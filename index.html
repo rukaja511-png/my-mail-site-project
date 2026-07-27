@@ -3,85 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Account Store BD - Trusted Digital Store</title>
+    <title>Account Store BD</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = { darkMode: 'class' }
-    </script>
-    <style>
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    </style>
+    <script>tailwind.config = { darkMode: 'class' }</script>
+    
+    <!-- Firebase SDK (Version 8) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
-<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen pb-20 md:pb-8">
+<body class="bg-slate-900 text-slate-100 min-h-screen pb-20 md:pb-8">
 
-    <!-- Navbar -->
-    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50">
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-2 cursor-pointer" onclick="showTab('shop')">
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black px-2.5 py-1 rounded-xl text-base shadow">ASB</div>
-                <div>
-                    <span class="font-bold text-sm md:text-base leading-tight block">Account Store <span class="text-blue-600 dark:text-emerald-400">BD</span></span>
-                </div>
+            <div class="flex items-center space-x-2" onclick="showTab('shop')">
+                <div class="bg-blue-600 text-white font-black px-2.5 py-1 rounded-xl text-base">ASB</div>
+                <span class="font-bold text-sm md:text-base">Account Store <span class="text-emerald-400">BD</span></span>
             </div>
-
             <div class="flex items-center space-x-2">
-                <div class="bg-emerald-50 dark:bg-slate-700/60 px-2.5 py-1 rounded-xl border border-emerald-200 dark:border-slate-600 flex items-center space-x-1">
-                    <span class="text-[10px] md:text-xs text-slate-500 dark:text-slate-300">Balance:</span>
-                    <span id="userBalanceDisplay" class="font-bold text-emerald-600 dark:text-emerald-400 text-xs md:text-sm">৳০.০০</span>
+                <div class="bg-slate-700/60 px-2.5 py-1 rounded-xl border border-slate-600 flex items-center space-x-1">
+                    <span class="text-[10px] text-slate-300">Balance:</span>
+                    <span id="userBalanceDisplay" class="font-bold text-emerald-400 text-xs">৳০.০০</span>
                 </div>
-
                 <div id="authHeaderBtn">
-                    <button onclick="showTab('auth')" class="bg-blue-600 text-white font-bold text-xs px-2.5 py-1.5 rounded-xl hover:bg-blue-700">Login</button>
+                    <button onclick="showTab('auth')" class="bg-blue-600 text-white font-bold text-xs px-2.5 py-1.5 rounded-xl">Login</button>
                 </div>
-
-                <button id="themeToggle" class="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-xs">☀️</button>
             </div>
         </div>
     </header>
 
-    <!-- Navigation Tabs -->
-    <div class="max-w-7xl mx-auto px-4 mt-3 flex space-x-2 border-b border-slate-200 dark:border-slate-700 pb-2 overflow-x-auto no-scrollbar">
+    <div class="max-w-7xl mx-auto px-4 mt-3 flex space-x-2 border-b border-slate-700 pb-2 overflow-x-auto">
         <button onclick="showTab('shop')" id="tab-shop" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-blue-600 text-white flex-shrink-0">🛍️ Shop</button>
-        <button onclick="showTab('deposit')" id="tab-deposit" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex-shrink-0">💳 Deposit</button>
-        <button onclick="showTab('profile')" id="tab-profile" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex-shrink-0">👤 Orders</button>
+        <button onclick="showTab('deposit')" id="tab-deposit" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 flex-shrink-0">💳 Deposit</button>
+        <button onclick="showTab('profile')" id="tab-profile" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 flex-shrink-0">👤 Orders</button>
     </div>
 
     <main class="max-w-7xl mx-auto px-4 py-4 space-y-5">
-
         <!-- AUTH TAB -->
-        <div id="page-auth" class="hidden max-w-sm mx-auto bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 shadow-lg">
-            <div class="flex border-b dark:border-slate-700 pb-2">
-                <button onclick="toggleAuthForm('login')" id="btnAuthLogin" class="w-1/2 font-bold text-xs md:text-sm text-blue-600 border-b-2 border-blue-600 pb-2">Login</button>
-                <button onclick="toggleAuthForm('signup')" id="btnAuthSignup" class="w-1/2 font-bold text-xs md:text-sm text-slate-400 pb-2">Register</button>
+        <div id="page-auth" class="hidden max-w-sm mx-auto bg-slate-800 p-5 rounded-2xl border border-slate-700 space-y-4">
+            <div class="flex border-b border-slate-700 pb-2">
+                <button onclick="toggleAuthForm('login')" id="btnAuthLogin" class="w-1/2 font-bold text-xs text-blue-500 border-b-2 border-blue-500 pb-2">Login</button>
+                <button onclick="toggleAuthForm('signup')" id="btnAuthSignup" class="w-1/2 font-bold text-xs text-slate-400 pb-2">Register</button>
             </div>
-
             <form id="formLogin" onsubmit="handleLogin(event)" class="space-y-3">
-                <div>
-                    <label class="block text-[11px] font-semibold mb-1">Email</label>
-                    <input type="email" id="loginEmail" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold mb-1">Password</label>
-                    <input type="password" id="loginPass" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:outline-none">
-                </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs">Login</button>
+                <input type="email" id="loginEmail" placeholder="Email" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs">
+                <input type="password" id="loginPass" placeholder="Password" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs">
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2.5 rounded-xl text-xs">Login</button>
             </form>
-
             <form id="formSignup" onsubmit="handleSignup(event)" class="space-y-3 hidden">
-                <div>
-                    <label class="block text-[11px] font-semibold mb-1">Name</label>
-                    <input type="text" id="regName" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold mb-1">Email</label>
-                    <input type="email" id="regEmail" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold mb-1">Password</label>
-                    <input type="password" id="regPass" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:outline-none">
-                </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs">Register</button>
+                <input type="text" id="regName" placeholder="Full Name" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs">
+                <input type="email" id="regEmail" placeholder="Email" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs">
+                <input type="password" id="regPass" placeholder="Password" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs">
+                <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-xs">Register</button>
             </form>
         </div>
 
@@ -89,161 +61,119 @@
         <div id="page-shop" class="space-y-5">
             <div>
                 <h2 class="text-xs font-bold mb-2">Categories</h2>
-                <div class="flex space-x-2 overflow-x-auto no-scrollbar" id="dynamicCategoryBar">
+                <div class="flex space-x-2 overflow-x-auto" id="dynamicCategoryBar">
                     <p class="text-xs text-slate-400">Loading categories...</p>
                 </div>
             </div>
 
-            <div id="categoryDescBox" class="hidden bg-blue-50 dark:bg-slate-800 border border-blue-200 dark:border-slate-700 p-3 rounded-xl text-xs">
-                <h3 id="catDescTitle" class="font-bold text-blue-600 dark:text-blue-400 mb-0.5">Category Info</h3>
-                <p id="catDescText" class="text-slate-600 dark:text-slate-300 text-[11px]"></p>
-            </div>
-
-            <!-- Mobile & PC Grid Optimization -->
             <div class="space-y-3">
                 <h2 class="text-xs font-bold">Products Stock</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="dynamicProductsContainer">
-                    <p class="text-xs text-slate-400">No products available.</p>
+                    <p class="text-xs text-slate-400">Loading products...</p>
                 </div>
             </div>
         </div>
 
         <!-- DEPOSIT TAB -->
-        <div id="page-deposit" class="hidden max-w-md mx-auto bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4">
-            <h2 class="text-base font-bold text-center">Add Funds / Deposit</h2>
-
-            <div>
-                <label class="block text-xs font-semibold mb-2">Payment Method Select Koro:</label>
-                <div class="grid grid-cols-3 gap-2" id="paymentMethodsButtons"></div>
+        <div id="page-deposit" class="hidden max-w-md mx-auto bg-slate-800 p-5 rounded-2xl border border-slate-700 space-y-4">
+            <h2 class="text-base font-bold text-center">Add Deposit (Min ৳25)</h2>
+            <div class="grid grid-cols-3 gap-2" id="paymentMethodsButtons">
+                <button type="button" onclick="selectPaymentMethod('bKash', '01700000000')" class="p-2 border border-slate-700 bg-slate-900 rounded-xl text-xs font-bold text-blue-400">bKash</button>
+                <button type="button" onclick="selectPaymentMethod('Nagad', '01800000000')" class="p-2 border border-slate-700 bg-slate-900 rounded-xl text-xs font-bold text-orange-400">Nagad</button>
+                <button type="button" onclick="selectPaymentMethod('Rocket', '01900000000')" class="p-2 border border-slate-700 bg-slate-900 rounded-xl text-xs font-bold text-purple-400">Rocket</button>
             </div>
-            
-            <div class="bg-amber-50 dark:bg-slate-900 border border-amber-200 dark:border-slate-700 p-3 rounded-xl text-xs text-amber-800 dark:text-amber-300" id="depositInstruction">
-                Select a payment method above.
-            </div>
-
-            <form onsubmit="handleDepositSubmit(event)" class="space-y-3 pt-1">
-                <div>
-                    <label class="block text-[11px] font-semibold mb-1">Deposit Amount (BDT) <span class="text-red-500 font-normal">(Min ৳25)</span></label>
-                    <input type="number" id="depAmount" min="25" required placeholder="Minimum 25 BDT" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold mb-1">Transaction ID (TrxID)</label>
-                    <input type="text" id="depTrx" required placeholder="e.g. 9J8A7K2M" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs font-mono uppercase focus:outline-none">
-                </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs">Submit Request</button>
+            <div id="depositInstruction" class="text-xs text-amber-300 bg-slate-900 p-3 rounded-xl border border-slate-700">Select payment method above.</div>
+            <form onsubmit="handleDepositSubmit(event)" class="space-y-3">
+                <input type="number" id="depAmount" min="25" placeholder="Amount (Min 25 BDT)" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs">
+                <input type="text" id="depTrx" placeholder="TrxID" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs uppercase font-mono">
+                <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-xs">Submit Request</button>
             </form>
         </div>
 
         <!-- PROFILE / ORDERS TAB -->
         <div id="page-profile" class="hidden space-y-4 max-w-3xl mx-auto">
-            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 flex justify-between items-center">
+            <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 flex justify-between items-center">
                 <div>
-                    <h2 class="text-sm font-bold" id="profileUserName">User Profile</h2>
-                    <p class="text-[11px] text-slate-400" id="profileUserEmail">Guest User</p>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Balance: <strong class="text-emerald-500 font-bold" id="profileBalanceText">৳০.০০</strong></p>
+                    <h2 class="text-sm font-bold" id="profileUserName">User</h2>
+                    <p class="text-[11px] text-slate-400" id="profileUserEmail">email@example.com</p>
                 </div>
-                <button onclick="handleLogout()" class="bg-red-500/10 text-red-500 font-bold text-xs px-3 py-1.5 rounded-xl hover:bg-red-500/20">Logout</button>
+                <button onclick="handleLogout()" class="bg-red-500/20 text-red-400 font-bold text-xs px-3 py-1.5 rounded-xl">Logout</button>
             </div>
-
-            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-xs font-bold">Purchased Accounts History</h2>
-                    <button id="copyAllBtn" onclick="copyPurchasedAccounts()" class="hidden bg-blue-600 text-white text-xs font-bold px-2.5 py-1 rounded-xl">📋 Copy All</button>
-                </div>
-                <div id="purchasedListContainer" class="space-y-2">
-                    <p class="text-xs text-slate-400">No purchase history found.</p>
-                </div>
+            <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3">
+                <h2 class="text-xs font-bold">Purchased Orders</h2>
+                <div id="purchasedListContainer" class="space-y-2"></div>
             </div>
         </div>
-
     </main>
 
     <script>
+        // 1. Firebase Config (Replace with YOUR Firebase credentials)
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+            projectId: "YOUR_PROJECT",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "YOUR_APP_ID"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
         let currentUser = JSON.parse(localStorage.getItem('asb_active_user')) || null;
-        let selectedPaymentMethod = null;
+        let selectedMethodName = '';
 
-        function updateUIState() {
-            const authHeader = document.getElementById('authHeaderBtn');
+        // Realtime Data Sync from Firebase
+        function listenToData() {
+            db.ref('categories').on('value', snapshot => {
+                const data = snapshot.val() || {};
+                const catContainer = document.getElementById('dynamicCategoryBar');
+                const list = Object.values(data);
+                if(list.length === 0) catContainer.innerHTML = `<p class="text-xs text-slate-400">No categories found.</p>`;
+                else {
+                    catContainer.innerHTML = list.map(c => `
+                        <button class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold">${c.name}</button>
+                    `).join('');
+                }
+            });
+
+            db.ref('subcategories').on('value', snapshot => {
+                const data = snapshot.val() || {};
+                const prodContainer = document.getElementById('dynamicProductsContainer');
+                const list = Object.entries(data);
+                if(list.length === 0) prodContainer.innerHTML = `<p class="text-xs text-slate-400">No products available.</p>`;
+                else {
+                    prodContainer.innerHTML = list.map(([key, s]) => {
+                        const stockList = s.stock || [];
+                        return `
+                            <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 space-y-3">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="font-bold text-xs">${s.name}</h3>
+                                    <span class="text-xs font-bold text-emerald-400">৳${s.price}</span>
+                                </div>
+                                <p class="text-[10px] text-slate-400 bg-slate-900 p-2 rounded-xl border border-slate-800">${s.desc || 'No details'}</p>
+                                <div class="flex justify-between items-center text-xs pt-1">
+                                    <span class="text-slate-400">Stock: <strong class="text-emerald-400">${stockList.length} pcs</strong></span>
+                                    <button onclick="buyProduct('${key}')" class="bg-blue-600 text-white px-3 py-1 rounded-xl text-xs font-bold">Buy</button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            });
+
             if(currentUser) {
-                const users = JSON.parse(localStorage.getItem('asb_users')) || [];
-                const userObj = users.find(u => u.email === currentUser.email) || currentUser;
-                
-                document.getElementById('userBalanceDisplay').innerText = `৳${(userObj.balance || 0).toFixed(2)}`;
-                document.getElementById('profileBalanceText').innerText = `৳${(userObj.balance || 0).toFixed(2)}`;
-                document.getElementById('profileUserName').innerText = userObj.name || "User";
-                document.getElementById('profileUserEmail').innerText = userObj.email;
-
-                authHeader.innerHTML = `<span class="text-xs font-bold text-emerald-500 truncate max-w-[80px] block">${userObj.name}</span>`;
-            } else {
-                document.getElementById('userBalanceDisplay').innerText = `৳০.০০`;
-                document.getElementById('profileBalanceText').innerText = `৳০.০০`;
-                document.getElementById('profileUserName').innerText = "Guest User";
-                document.getElementById('profileUserEmail').innerText = "Not logged in";
-
-                authHeader.innerHTML = `<button onclick="showTab('auth')" class="bg-blue-600 text-white font-bold text-xs px-2.5 py-1.5 rounded-xl hover:bg-blue-700">Login</button>`;
-            }
-        }
-
-        function loadStoreData() {
-            updateUIState();
-
-            const categories = JSON.parse(localStorage.getItem('asb_categories')) || [];
-            const subCategories = JSON.parse(localStorage.getItem('asb_subcategories')) || [];
-
-            // Render Categories
-            const catContainer = document.getElementById('dynamicCategoryBar');
-            if(categories.length === 0) {
-                catContainer.innerHTML = `<p class="text-xs text-slate-400">No categories found.</p>`;
-            } else {
-                catContainer.innerHTML = categories.map(c => `
-                    <button onclick="selectCategory('${c.name}', '${c.desc}')" class="flex-shrink-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-2 rounded-xl flex items-center space-x-1 cursor-pointer hover:border-blue-500">
-                        <span class="font-bold text-xs">${c.name}</span>
-                    </button>
-                `).join('');
-            }
-
-            // Render Products (Fixes Mobile Display Issue)
-            const prodContainer = document.getElementById('dynamicProductsContainer');
-            if(subCategories.length === 0) {
-                prodContainer.innerHTML = `<p class="text-xs text-slate-400">No products available in stock.</p>`;
-            } else {
-                prodContainer.innerHTML = subCategories.map(s => {
-                    const stockCount = (s.stock && Array.isArray(s.stock)) ? s.stock.length : 0;
-                    return `
-                    <div class="bg-white dark:bg-slate-800 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 flex flex-col justify-between space-y-3 shadow-sm">
-                        <div class="space-y-1.5">
-                            <div class="flex justify-between items-start">
-                                <h3 class="font-bold text-xs md:text-sm leading-snug">${s.name}</h3>
-                                <span class="text-xs md:text-sm font-extrabold text-blue-600 dark:text-emerald-400">৳${s.price}</span>
-                            </div>
-                            <p class="text-[10px] md:text-[11px] text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 p-2 rounded-xl border border-slate-100 dark:border-slate-800 whitespace-pre-line">${s.desc || 'No description'}</p>
-                        </div>
-                        <div class="flex justify-between items-center pt-2 text-xs border-t dark:border-slate-700">
-                            <span class="text-[11px] text-slate-400">Stock: <strong class="text-emerald-500 font-bold">${stockCount} pcs</strong></span>
-                            <div class="flex items-center space-x-1.5">
-                                <input type="number" id="qty-${s.id}" min="1" max="${stockCount}" value="1" class="w-10 p-1 bg-slate-100 dark:bg-slate-900 border rounded-lg text-center text-xs">
-                                <button onclick="buyProduct('${s.id}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-1 rounded-xl text-xs transition">Buy</button>
-                            </div>
-                        </div>
-                    </div>
-                `}).join('');
-            }
-
-            loadPaymentMethods();
-            loadPurchases();
-        }
-
-        function toggleAuthForm(type) {
-            if(type === 'login') {
-                document.getElementById('formLogin').classList.remove('hidden');
-                document.getElementById('formSignup').classList.add('hidden');
-                document.getElementById('btnAuthLogin').className = "w-1/2 font-bold text-xs text-blue-600 border-b-2 border-blue-600 pb-2";
-                document.getElementById('btnAuthSignup').className = "w-1/2 font-bold text-xs text-slate-400 pb-2";
-            } else {
-                document.getElementById('formLogin').classList.add('hidden');
-                document.getElementById('formSignup').classList.remove('hidden');
-                document.getElementById('btnAuthSignup').className = "w-1/2 font-bold text-xs text-blue-600 border-b-2 border-blue-600 pb-2";
-                document.getElementById('btnAuthLogin').className = "w-1/2 font-bold text-xs text-slate-400 pb-2";
+                db.ref('users/' + currentUser.key).on('value', snapshot => {
+                    const userData = snapshot.val();
+                    if(userData) {
+                        currentUser = { ...userData, key: currentUser.key };
+                        document.getElementById('userBalanceDisplay').innerText = `৳${(userData.balance || 0).toFixed(2)}`;
+                        document.getElementById('profileUserName').innerText = userData.name;
+                        document.getElementById('profileUserEmail').innerText = userData.email;
+                        document.getElementById('authHeaderBtn').innerHTML = `<span class="text-xs text-emerald-400 font-bold">${userData.name}</span>`;
+                        renderOrders(userData.purchases || []);
+                    }
+                });
             }
         }
 
@@ -253,18 +183,15 @@
             const email = document.getElementById('regEmail').value.toLowerCase().trim();
             const pass = document.getElementById('regPass').value;
 
-            const users = JSON.parse(localStorage.getItem('asb_users')) || [];
-            if(users.find(u => u.email === email)) return alert('Email already exists!');
-
+            const userRef = db.ref('users').push();
             const newUser = { name, email, pass, balance: 0, purchases: [] };
-            users.push(newUser);
-            localStorage.setItem('asb_users', JSON.stringify(users));
-            localStorage.setItem('asb_active_user', JSON.stringify(newUser));
-            currentUser = newUser;
-
-            alert('Registration Successful!');
-            showTab('shop');
-            loadStoreData();
+            userRef.set(newUser).then(() => {
+                currentUser = { ...newUser, key: userRef.key };
+                localStorage.setItem('asb_active_user', JSON.stringify(currentUser));
+                alert('Account Registered!');
+                showTab('shop');
+                location.reload();
+            });
         }
 
         function handleLogin(e) {
@@ -272,170 +199,99 @@
             const email = document.getElementById('loginEmail').value.toLowerCase().trim();
             const pass = document.getElementById('loginPass').value;
 
-            const users = JSON.parse(localStorage.getItem('asb_users')) || [];
-            const user = users.find(u => u.email === email && u.pass === pass);
+            db.ref('users').once('value', snapshot => {
+                const users = snapshot.val() || {};
+                const foundKey = Object.keys(users).find(k => users[k].email === email && users[k].pass === pass);
+                if(foundKey) {
+                    currentUser = { ...users[foundKey], key: foundKey };
+                    localStorage.setItem('asb_active_user', JSON.stringify(currentUser));
+                    alert('Logged In!');
+                    showTab('shop');
+                    location.reload();
+                } else alert('Invalid Email or Password!');
+            });
+        }
 
-            if(!user) return alert('Wrong Email or Password!');
+        function buyProduct(subKey) {
+            if(!currentUser) return alert('Please login first!');
+            db.ref('subcategories/' + subKey).once('value', snapshot => {
+                const sub = snapshot.val();
+                if(!sub || !sub.stock || sub.stock.length === 0) return alert('Out of stock!');
+                if(currentUser.balance < sub.price) return alert('Insufficient Balance!');
 
-            localStorage.setItem('asb_active_user', JSON.stringify(user));
-            currentUser = user;
+                const boughtItem = sub.stock.shift();
+                const newBalance = currentUser.balance - sub.price;
 
-            alert('Logged in!');
-            showTab('shop');
-            loadStoreData();
+                const purchases = currentUser.purchases || [];
+                purchases.push({ date: new Date().toLocaleDateString(), item: sub.name, data: boughtItem });
+
+                // Update Database
+                db.ref('subcategories/' + subKey + '/stock').set(sub.stock);
+                db.ref('users/' + currentUser.key).update({ balance: newBalance, purchases: purchases });
+
+                alert('Purchase Successful! Check your orders tab.');
+            });
+        }
+
+        function selectPaymentMethod(name, num) {
+            selectedMethodName = name;
+            document.getElementById('depositInstruction').innerHTML = `Send Money to <strong>${name}</strong>: <span class="text-white font-mono font-bold">${num}</span>`;
+        }
+
+        function handleDepositSubmit(e) {
+            e.preventDefault();
+            if(!currentUser) return alert('Please Login first!');
+            const amount = parseFloat(document.getElementById('depAmount').value);
+            const trx = document.getElementById('depTrx').value.trim();
+
+            db.ref('deposits').push({
+                userKey: currentUser.key,
+                email: currentUser.email,
+                amount: amount,
+                trx: trx,
+                method: selectedMethodName || 'bKash',
+                status: 'Pending'
+            });
+
+            alert('Deposit Request Submitted!');
+            e.target.reset();
+        }
+
+        function renderOrders(purchases) {
+            const container = document.getElementById('purchasedListContainer');
+            if(purchases.length === 0) container.innerHTML = `<p class="text-xs text-slate-400">No orders found.</p>`;
+            else {
+                container.innerHTML = purchases.map(p => `
+                    <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 text-xs space-y-1">
+                        <div class="flex justify-between font-bold text-blue-400"><span>${p.item}</span><span class="text-slate-500 text-[10px]">${p.date}</span></div>
+                        <div class="font-mono text-emerald-400 bg-slate-800 p-2 rounded select-all break-all text-[11px]">${p.data}</div>
+                    </div>
+                `).join('');
+            }
         }
 
         function handleLogout() {
             localStorage.removeItem('asb_active_user');
             currentUser = null;
-            showTab('shop');
-            loadStoreData();
-        }
-
-        function selectCategory(name, desc) {
-            document.getElementById('categoryDescBox').classList.remove('hidden');
-            document.getElementById('catDescTitle').innerText = name;
-            document.getElementById('catDescText').innerText = desc || "No details.";
-        }
-
-        function buyProduct(subId) {
-            if(!currentUser) {
-                alert('Please Login first!');
-                showTab('auth');
-                return;
-            }
-
-            const subCategories = JSON.parse(localStorage.getItem('asb_subcategories')) || [];
-            const sub = subCategories.find(s => s.id === subId);
-            const qty = parseInt(document.getElementById(`qty-${subId}`).value) || 1;
-
-            const users = JSON.parse(localStorage.getItem('asb_users')) || [];
-            const userIdx = users.findIndex(u => u.email === currentUser.email);
-
-            if(!sub || !sub.stock || sub.stock.length < qty) return alert('Stock low!');
-
-            const totalPrice = sub.price * qty;
-            if(users[userIdx].balance < totalPrice) return alert(`Insufficient Balance! Needed: ৳${totalPrice}`);
-
-            users[userIdx].balance -= totalPrice;
-            const purchased = sub.stock.splice(0, qty);
-
-            if(!users[userIdx].purchases) users[userIdx].purchases = [];
-            users[userIdx].purchases.push({ date: new Date().toLocaleDateString(), item: sub.name, items: purchased });
-
-            localStorage.setItem('asb_users', JSON.stringify(users));
-            localStorage.setItem('asb_active_user', JSON.stringify(users[userIdx]));
-            localStorage.setItem('asb_subcategories', JSON.stringify(subCategories));
-
-            alert(`Purchase Successful! ${qty} item(s) bought.`);
-            loadStoreData();
-        }
-
-        function loadPaymentMethods() {
-            const methods = JSON.parse(localStorage.getItem('asb_payments')) || [
-                { name: 'bKash', type: 'Personal', number: '01700000000' },
-                { name: 'Nagad', type: 'Personal', number: '01800000000' },
-                { name: 'Rocket', type: 'Personal', number: '01900000000' }
-            ];
-
-            const container = document.getElementById('paymentMethodsButtons');
-            container.innerHTML = methods.map((m, idx) => `
-                <button type="button" onclick="selectPaymentMethod(${idx}, '${m.name}', '${m.type}', '${m.number}')" id="payBtn-${idx}" class="pay-method-btn p-2.5 border dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 rounded-xl font-bold text-xs flex flex-col items-center justify-center space-y-0.5 hover:border-blue-500">
-                    <span class="text-xs font-extrabold text-blue-600 dark:text-emerald-400">${m.name}</span>
-                    <span class="text-[9px] text-slate-400 font-normal">${m.type}</span>
-                </button>
-            `).join('');
-        }
-
-        function selectPaymentMethod(idx, name, type, number) {
-            document.querySelectorAll('.pay-method-btn').forEach(btn => btn.classList.remove('border-blue-500', 'bg-blue-50/50'));
-            document.getElementById(`payBtn-${idx}`).classList.add('border-blue-500', 'bg-blue-50/50');
-
-            selectedPaymentMethod = { name, type, number };
-            document.getElementById('depositInstruction').innerHTML = `
-                <div class="space-y-1">
-                    <p class="font-bold text-xs text-blue-600">${name} (${type}) Number:</p>
-                    <p class="font-mono text-sm font-black bg-white dark:bg-slate-800 p-2 rounded-lg border border-amber-200 dark:border-slate-700 text-center select-all">${number}</p>
-                    <p class="text-[10px] text-slate-500">Send money (Min ৳25) to this number and submit TrxID below.</p>
-                </div>
-            `;
-        }
-
-        function handleDepositSubmit(e) {
-            e.preventDefault();
-            if(!currentUser) return alert('Login first!');
-            if(!selectedPaymentMethod) return alert('Select payment method!');
-
-            const amount = parseFloat(document.getElementById('depAmount').value);
-            const trx = document.getElementById('depTrx').value.trim();
-
-            if(amount < 25) return alert('Minimum deposit is ৳25!');
-
-            const requests = JSON.parse(localStorage.getItem('asb_deposit_requests')) || [];
-            requests.push({ id: Date.now(), email: currentUser.email, amount, trx, method: selectedPaymentMethod.name, status: 'Pending' });
-            localStorage.setItem('asb_deposit_requests', JSON.stringify(requests));
-
-            alert('Deposit request submitted successfully!');
-            e.target.reset();
-        }
-
-        function loadPurchases() {
-            if(!currentUser) return;
-            const users = JSON.parse(localStorage.getItem('asb_users')) || [];
-            const userObj = users.find(u => u.email === currentUser.email) || currentUser;
-
-            const container = document.getElementById('purchasedListContainer');
-            const copyBtn = document.getElementById('copyAllBtn');
-
-            if(!userObj.purchases || userObj.purchases.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400">No purchase history found.</p>`;
-                copyBtn.classList.add('hidden');
-                return;
-            }
-
-            let allItems = [];
-            let html = '';
-
-            userObj.purchases.forEach(o => {
-                o.items.forEach(i => allItems.push(i));
-                html += `
-                    <div class="bg-slate-50 dark:bg-slate-900 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs space-y-1">
-                        <div class="flex justify-between font-bold text-blue-500">
-                            <span>${o.item}</span>
-                            <span class="text-slate-400 text-[10px]">${o.date}</span>
-                        </div>
-                        <div class="font-mono text-emerald-500 bg-white dark:bg-slate-800 p-2 rounded border border-slate-100 dark:border-slate-700 select-all text-[11px] break-all">${o.items.join('<br>')}</div>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
-            if(allItems.length > 1) copyBtn.classList.remove('hidden');
-            else copyBtn.classList.add('hidden');
-        }
-
-        function copyPurchasedAccounts() {
-            const users = JSON.parse(localStorage.getItem('asb_users')) || [];
-            const userObj = users.find(u => u.email === currentUser.email);
-            let list = [];
-            userObj.purchases.forEach(o => o.items.forEach(i => list.push(i)));
-            navigator.clipboard.writeText(list.join('\n'));
-            alert('All items copied!');
+            location.reload();
         }
 
         function showTab(tab) {
-            ['shop', 'deposit', 'profile', 'auth'].forEach(t => {
-                document.getElementById(`page-${t}`).classList.add('hidden');
-                const btn = document.getElementById(`tab-${t}`);
-                if(btn) btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex-shrink-0";
-            });
+            ['shop', 'deposit', 'profile', 'auth'].forEach(t => document.getElementById(`page-${t}`).classList.add('hidden'));
             document.getElementById(`page-${tab}`).classList.remove('hidden');
-            const activeBtn = document.getElementById(`tab-${tab}`);
-            if(activeBtn) activeBtn.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-blue-600 text-white flex-shrink-0";
         }
 
-        document.getElementById('themeToggle').addEventListener('click', () => document.documentElement.classList.toggle('dark'));
-        window.onload = loadStoreData;
+        function toggleAuthForm(type) {
+            if(type === 'login') {
+                document.getElementById('formLogin').classList.remove('hidden');
+                document.getElementById('formSignup').classList.add('hidden');
+            } else {
+                document.getElementById('formLogin').classList.add('hidden');
+                document.getElementById('formSignup').classList.remove('hidden');
+            }
+        }
+
+        window.onload = listenToData;
     </script>
 </body>
 </html>
