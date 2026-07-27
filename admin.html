@@ -4,214 +4,164 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Account Store BD</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        neonBlue: '#00d2ff',
-                        neonGreen: '#00ff87'
-                    }
-                }
-            }
-        }
-    </script>
+    <script>tailwind.config = { darkMode: 'class' }</script>
 </head>
 <body class="bg-gray-100 dark:bg-slate-900 text-gray-800 dark:text-gray-100 min-h-screen">
 
     <!-- Admin Login Protection Modal -->
     <div id="loginModal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 max-w-sm w-full space-y-4 shadow-2xl">
-            <div class="text-center">
-                <span class="bg-red-600 text-white font-extrabold px-3 py-1 rounded-xl text-xs uppercase tracking-wider">Admin Restricted</span>
-                <h2 class="text-xl font-bold mt-2">Enter Passcode</h2>
-                <p class="text-xs text-gray-400 mt-1">Please enter the security password to access Admin Panel.</p>
-            </div>
-            
-            <div>
-                <input type="password" id="adminPassInput" placeholder="Enter Admin Password..." class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-red-500">
-                <p id="errorMsg" class="text-red-500 text-xs hidden mt-1 text-center font-semibold">❌ Wrong password! Try again.</p>
-            </div>
-
-            <button onclick="checkAdminPassword()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl transition text-sm">
-                Login to Dashboard
-            </button>
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 max-w-sm w-full space-y-4">
+            <h2 class="text-xl font-bold text-center">Admin Passcode</h2>
+            <input type="password" id="adminPassInput" placeholder="Enter Security Password..." class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-3 text-sm focus:outline-none">
+            <button onclick="checkAdminPassword()" class="w-full bg-red-600 text-white font-bold py-3 rounded-xl text-sm">Login</button>
         </div>
     </div>
 
-    <!-- Protected Admin Panel Content (Hidden by Default) -->
     <div id="adminContent" class="hidden">
-        
-        <!-- Admin Header -->
-        <header class="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <span class="bg-red-600 text-white font-extrabold px-3 py-1 rounded-xl text-sm uppercase">Admin Panel</span>
-                    <h1 class="font-bold text-lg hidden sm:inline">Account Store BD</h1>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <a href="index.html" class="text-xs font-bold text-blue-500 hover:underline">View User Site ↗</a>
-                    <button id="themeToggle" class="p-2 rounded-xl bg-gray-100 dark:bg-slate-700">☀️</button>
-                    <button onclick="logoutAdmin()" class="bg-gray-200 dark:bg-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl text-red-500">Logout</button>
-                </div>
+        <header class="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-50 p-4">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <h1 class="font-bold text-lg text-red-500">Admin Control Panel</h1>
+                <a href="index.html" class="text-xs text-blue-500 font-bold hover:underline">View User Site ↗</a>
             </div>
         </header>
 
         <main class="max-w-7xl mx-auto px-4 py-6 space-y-8">
 
-            <!-- 1. Deposit Request Management -->
+            <!-- 1. ADD MAIN CATEGORY -->
             <section class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h2 class="text-lg font-bold">Deposit Requests (TrxID)</h2>
-                        <p class="text-xs text-gray-400">Approve or reject manual bKash/Nagad payments</p>
-                    </div>
-                    <span class="bg-yellow-500/20 text-yellow-500 text-xs font-bold px-2.5 py-1 rounded-lg">1 Pending</span>
+                <h2 class="text-md font-bold">1. Create Main Category</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <input type="text" id="catName" placeholder="Category Name (e.g. Gmail)" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
+                    <input type="text" id="catDesc" placeholder="Category Description..." class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
                 </div>
+                <button onclick="addCategory()" class="bg-blue-600 text-white font-bold px-4 py-2 rounded-xl text-xs">Add Category</button>
+            </section>
 
+            <!-- 2. ADD SUB-CATEGORY & STOCK -->
+            <section class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4">
+                <h2 class="text-md font-bold">2. Add Sub-Category & Stock</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <select id="subCatParent" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs"></select>
+                    <input type="text" id="subCatName" placeholder="Sub-Category Name (e.g. Gmail PVA)" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
+                    <input type="number" id="subCatPrice" step="0.01" placeholder="Price (BDT)" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
+                </div>
+                <textarea id="subCatDesc" placeholder="Sub-Category Description Box..." class="w-full bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs h-16"></textarea>
+                <textarea id="subCatStock" placeholder="Paste Stock Accounts (One per line e.g. email:pass)" class="w-full bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs h-24 font-mono"></textarea>
+                <button onclick="addSubCategory()" class="bg-emerald-600 text-white font-bold px-4 py-2 rounded-xl text-xs">Add Sub-Category & Stock</button>
+            </section>
+
+            <!-- 3. ADD PAYMENT METHOD -->
+            <section class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4">
+                <h2 class="text-md font-bold">3. Set Payment Method (bKash/Nagad)</h2>
+                <div class="grid grid-cols-3 gap-3">
+                    <input type="text" id="payName" placeholder="Method (e.g. bKash)" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
+                    <input type="text" id="payType" placeholder="Type (e.g. Personal)" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
+                    <input type="text" id="payNum" placeholder="Number (e.g. 01700...)" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
+                </div>
+                <button onclick="addPaymentMethod()" class="bg-purple-600 text-white font-bold px-4 py-2 rounded-xl text-xs">Save Payment Method</button>
+            </section>
+
+            <!-- 4. DEPOSIT REQUESTS & APPROVAL -->
+            <section class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4">
+                <h2 class="text-md font-bold">4. Pending Deposit Requests</h2>
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs">
-                        <thead class="bg-gray-50 dark:bg-slate-900 text-gray-400 uppercase font-semibold">
-                            <tr>
-                                <th class="p-3">User Email</th>
-                                <th class="p-3">Method</th>
-                                <th class="p-3">Amount</th>
-                                <th class="p-3">TrxID</th>
-                                <th class="p-3">Status</th>
-                                <th class="p-3 text-right">Action</th>
+                    <table class="w-full text-xs text-left">
+                        <thead>
+                            <tr class="bg-gray-100 dark:bg-slate-900">
+                                <th class="p-2">User Email</th>
+                                <th class="p-2">Amount</th>
+                                <th class="p-2">TrxID</th>
+                                <th class="p-2">Action</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100 dark:divide-slate-700">
-                            <tr id="trx-row-1">
-                                <td class="p-3 font-semibold">user123@gmail.com</td>
-                                <td class="p-3"><span class="text-pink-500 font-bold">bKash</span></td>
-                                <td class="p-3 font-bold text-emerald-500">৳500.00</td>
-                                <td class="p-3 font-mono font-bold uppercase">9J8A7K2M</td>
-                                <td class="p-3"><span id="status-1" class="bg-yellow-500/10 text-yellow-500 px-2 py-0.5 rounded font-bold">Pending</span></td>
-                                <td class="p-3 text-right space-x-2">
-                                    <button onclick="approveTrx(1, 500)" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-lg transition">Approve</button>
-                                    <button onclick="rejectTrx(1)" class="bg-red-600 hover:bg-red-700 text-white font-bold px-3 py-1.5 rounded-lg transition">Reject</button>
-                                </td>
-                            </tr>
-                        </tbody>
+                        <tbody id="depositRequestsTable"></tbody>
                     </table>
                 </div>
-            </section>
-
-            <!-- 2. Category Control -->
-            <section class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-6">
-                <div>
-                    <h2 class="text-lg font-bold">Category & Description Control</h2>
-                    <p class="text-xs text-gray-400">Toggle categories ON/OFF and edit individual descriptions</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-gray-50 dark:bg-slate-900 p-4 rounded-xl space-y-3 border border-gray-200 dark:border-slate-700">
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center space-x-2">
-                                <img src="https://cdn-icons-png.flaticon.com/512/5968/5968534.png" class="w-6 h-6" alt="Gmail">
-                                <span class="font-bold text-sm">Gmail (Main Category)</span>
-                            </div>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" checked class="sr-only peer" onchange="toggleCategory('Gmail', this.checked)">
-                                <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
-                            </label>
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-semibold text-gray-400 mb-1">Main Category Description:</label>
-                            <textarea class="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-2 text-xs focus:outline-none" rows="2">High quality verified Gmail accounts. Replacement guarantee on invalid login within 24 hours.</textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <button onclick="alert('Saved!')" class="bg-blue-600 text-white font-bold px-5 py-2.5 rounded-xl text-xs">Save Changes</button>
-            </section>
-
-            <!-- 3. Bulk Stock Upload -->
-            <section class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4">
-                <div>
-                    <h2 class="text-lg font-bold">Add Bulk Stock to Sub-Category</h2>
-                    <p class="text-xs text-gray-400">Paste accounts list (email:password format)</p>
-                </div>
-
-                <form class="space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold mb-1">Select Sub-Category</label>
-                            <select class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-3 text-xs focus:outline-none">
-                                <option>Gmail Instagram PVA (Price: ৳8.75)</option>
-                                <option>Outlook French Live (Price: ৳0.77)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold mb-1">Update Price (BDT)</label>
-                            <input type="number" step="0.01" value="8.75" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-3 text-xs focus:outline-none">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold mb-1">Bulk Stock Accounts (One per line):</label>
-                        <textarea placeholder="acc1@gmail.com:pass123&#10;acc2@gmail.com:pass456" class="w-full h-32 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-3 text-xs font-mono focus:outline-none"></textarea>
-                    </div>
-
-                    <button type="button" onclick="alert('Stock Uploaded Successfully!')" class="bg-emerald-600 text-white font-bold px-6 py-3 rounded-xl text-xs">Upload Stock</button>
-                </form>
             </section>
 
         </main>
     </div>
 
-    <!-- JavaScript Logic & Security -->
     <script>
-        // 🔑 UPDATED ADMIN PASSWORD
         const ADMIN_PASSWORD = "HABIBI@RAJU143";
 
         function checkAdminPassword() {
-            const input = document.getElementById('adminPassInput').value;
-            const errorMsg = document.getElementById('errorMsg');
-
-            if(input === ADMIN_PASSWORD) {
+            if(document.getElementById('adminPassInput').value === ADMIN_PASSWORD) {
                 document.getElementById('loginModal').classList.add('hidden');
                 document.getElementById('adminContent').classList.remove('hidden');
-                localStorage.setItem('adminLoggedIn', 'true');
-            } else {
-                errorMsg.classList.remove('hidden');
-            }
+                loadAdminData();
+            } else alert('Wrong Password!');
         }
 
-        // Keep logged in on page refresh
-        if(localStorage.getItem('adminLoggedIn') === 'true') {
-            document.getElementById('loginModal').classList.add('hidden');
-            document.getElementById('adminContent').classList.remove('hidden');
+        function addCategory() {
+            const name = document.getElementById('catName').value;
+            const desc = document.getElementById('catDesc').value;
+            if(!name) return alert('Enter Category Name!');
+
+            const categories = JSON.parse(localStorage.getItem('asb_categories')) || [];
+            categories.push({ id: Date.now(), name, desc });
+            localStorage.setItem('asb_categories', JSON.stringify(categories));
+            alert('Category Added!');
+            loadAdminData();
         }
 
-        function logoutAdmin() {
-            localStorage.removeItem('adminLoggedIn');
-            location.reload();
+        function addSubCategory() {
+            const parent = document.getElementById('subCatParent').value;
+            const name = document.getElementById('subCatName').value;
+            const price = parseFloat(document.getElementById('subCatPrice').value) || 0;
+            const desc = document.getElementById('subCatDesc').value;
+            const stockRaw = document.getElementById('subCatStock').value;
+            const stock = stockRaw.split('\n').filter(s => s.trim() !== '');
+
+            if(!name || !price) return alert('Enter Name and Price!');
+
+            const subCategories = JSON.parse(localStorage.getItem('asb_subcategories')) || [];
+            subCategories.push({ id: 'sub_' + Date.now(), parent, name, price, desc, stock });
+            localStorage.setItem('asb_subcategories', JSON.stringify(subCategories));
+            alert('Sub-Category & Stock Added!');
         }
 
-        // Theme Switcher
-        document.getElementById('themeToggle').addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-        });
+        function addPaymentMethod() {
+            const name = document.getElementById('payName').value;
+            const type = document.getElementById('payType').value;
+            const number = document.getElementById('payNum').value;
 
-        // Toggle Category
-        function toggleCategory(categoryName, status) {
-            alert(`${categoryName} category status updated!`);
+            const payments = JSON.parse(localStorage.getItem('asb_payments')) || [];
+            payments.push({ name, type, number });
+            localStorage.setItem('asb_payments', JSON.stringify(payments));
+            alert('Payment Method Added!');
         }
 
-        // Deposit Actions
-        function approveTrx(id, amount) {
-            document.getElementById(`status-${id}`).innerText = "Approved";
-            alert(`Trx Approved! ৳${amount} added.`);
+        function loadAdminData() {
+            const categories = JSON.parse(localStorage.getItem('asb_categories')) || [];
+            const select = document.getElementById('subCatParent');
+            select.innerHTML = categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+
+            const requests = JSON.parse(localStorage.getItem('asb_deposit_requests')) || [];
+            const tbody = document.getElementById('depositRequestsTable');
+            tbody.innerHTML = requests.map(r => `
+                <tr class="border-b dark:border-slate-700">
+                    <td class="p-2">${r.email}</td>
+                    <td class="p-2 text-emerald-500 font-bold">৳${r.amount}</td>
+                    <td class="p-2 font-mono">${r.trx}</td>
+                    <td class="p-2 space-x-1">
+                        <button onclick="approveDeposit(${r.id}, ${r.amount})" class="bg-emerald-600 text-white px-2 py-1 rounded">Approve</button>
+                    </td>
+                </tr>
+            `).join('');
         }
 
-        function rejectTrx(id) {
-            document.getElementById(`status-${id}`).innerText = "Rejected";
-            alert('Trx Rejected!');
+        function approveDeposit(id, amount) {
+            let requests = JSON.parse(localStorage.getItem('asb_deposit_requests')) || [];
+            requests = requests.filter(r => r.id !== id);
+            localStorage.setItem('asb_deposit_requests', JSON.stringify(requests));
+
+            let currentBal = parseFloat(localStorage.getItem('asb_user_balance')) || 0;
+            localStorage.setItem('asb_user_balance', currentBal + parseFloat(amount));
+
+            alert(`Approved ৳${amount} to User Balance!`);
+            loadAdminData();
         }
     </script>
 </body>
