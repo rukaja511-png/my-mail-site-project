@@ -35,7 +35,7 @@
     <!-- Main Container -->
     <main class="p-4 max-w-lg mx-auto">
         
-        <!-- ================= 1. LOGIN / REGISTER PAGE (Default View) ================= -->
+        <!-- ================= 1. LOGIN / REGISTER PAGE ================= -->
         <div id="page-auth" class="space-y-4 my-10">
             <div class="text-center space-y-2">
                 <i class="fa-solid fa-store text-blue-500 text-4xl"></i>
@@ -45,8 +45,8 @@
 
             <div class="card-bg p-5 rounded-2xl space-y-4 border border-slate-700">
                 <div class="flex border-b border-slate-700 pb-2 text-sm font-bold">
-                    <button onclick="toggleAuth('login')" id="btnTabLogin" class="w-1/2 text-center text-blue-500 border-b-2 border-blue-500 pb-2">Login</button>
-                    <button onclick="toggleAuth('register')" id="btnTabRegister" class="w-1/2 text-center text-slate-400 pb-2">Register</button>
+                    <button type="button" onclick="toggleAuth('login')" id="btnTabLogin" class="w-1/2 text-center text-blue-500 border-b-2 border-blue-500 pb-2">Login</button>
+                    <button type="button" onclick="toggleAuth('register')" id="btnTabRegister" class="w-1/2 text-center text-slate-400 pb-2">Register</button>
                 </div>
 
                 <!-- Login Form -->
@@ -59,7 +59,7 @@
                         <label class="text-[10px] text-slate-400">Password</label>
                         <input type="password" id="loginPassword" required class="w-full bg-[#0b132b] border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none mt-1">
                     </div>
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-3 rounded-xl">Login</button>
+                    <button type="submit" id="loginBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-3 rounded-xl active:scale-95 transition">Login</button>
                 </form>
 
                 <!-- Register Form -->
@@ -76,16 +76,14 @@
                         <label class="text-[10px] text-slate-400">Password</label>
                         <input type="password" id="regPassword" required class="w-full bg-[#0b132b] border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none mt-1">
                     </div>
-                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-3 rounded-xl">Create Account</button>
+                    <button type="submit" id="regBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-3 rounded-xl active:scale-95 transition">Create Account</button>
                 </form>
             </div>
         </div>
 
         <!-- ================= 2. HOME / SHOP PAGE ================= -->
         <div id="page-home" class="hidden space-y-5">
-            <!-- Categories -->
             <div class="flex space-x-2 overflow-x-auto pb-1" id="categoryContainer"></div>
-            <!-- Products -->
             <div class="space-y-3" id="productsContainer"></div>
         </div>
 
@@ -94,25 +92,19 @@
             <div class="card-bg p-5 rounded-2xl space-y-4">
                 <h2 class="font-bold text-sm text-center text-slate-200">Select Payment Method</h2>
                 
-                <!-- Payment Logos -->
                 <div class="grid grid-cols-3 gap-2 text-center text-xs font-bold">
-                    <div onclick="selectPayment('bKash')" class="p-3 card-bg rounded-xl border hover:border-pink-500 cursor-pointer flex flex-col items-center space-y-1">
-                        <span class="text-pink-500 text-lg font-black">bkash</span>
-                        <span>bKash</span>
+                    <div onclick="selectPayment('bKash')" class="p-3 card-bg rounded-xl border border-slate-700 hover:border-pink-500 cursor-pointer flex flex-col items-center space-y-1">
+                        <span class="text-pink-500 text-lg font-black">bKash</span>
                     </div>
-                    <div onclick="selectPayment('Nagad')" class="p-3 card-bg rounded-xl border hover:border-orange-500 cursor-pointer flex flex-col items-center space-y-1">
-                        <span class="text-orange-500 text-lg font-black">NAGAD</span>
-                        <span>Nagad</span>
+                    <div onclick="selectPayment('Nagad')" class="p-3 card-bg rounded-xl border border-slate-700 hover:border-orange-500 cursor-pointer flex flex-col items-center space-y-1">
+                        <span class="text-orange-500 text-lg font-black">Nagad</span>
                     </div>
-                    <div onclick="selectPayment('Rocket')" class="p-3 card-bg rounded-xl border hover:border-purple-500 cursor-pointer flex flex-col items-center space-y-1">
+                    <div onclick="selectPayment('Rocket')" class="p-3 card-bg rounded-xl border border-slate-700 hover:border-purple-500 cursor-pointer flex flex-col items-center space-y-1">
                         <span class="text-purple-500 text-lg font-black">Rocket</span>
-                        <span>Rocket</span>
                     </div>
                 </div>
 
-                <div id="paymentInstructions" class="hidden text-xs bg-[#0b132b] p-3 rounded-xl border border-slate-800 space-y-1">
-                    <!-- Instruction loaded dynamically -->
-                </div>
+                <div id="paymentInstructions" class="hidden text-xs bg-[#0b132b] p-3 rounded-xl border border-slate-800 space-y-1"></div>
 
                 <form onsubmit="handleDepositSubmit(event)" class="space-y-3">
                     <input type="number" id="depAmount" min="10" placeholder="Amount (৳)" required class="w-full bg-[#0b132b] border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
@@ -130,7 +122,7 @@
 
     </main>
 
-    <!-- Bottom Navigation Bar (Shown only after login) -->
+    <!-- Bottom Navigation Bar -->
     <nav id="bottomNav" class="hidden fixed bottom-0 left-0 right-0 bg-[#0b132b] border-t border-slate-800 px-6 py-2 flex justify-between items-center text-xs text-slate-400 z-50">
         <button onclick="showTab('home')" class="flex flex-col items-center space-y-1 hover:text-blue-400">
             <i class="fa-solid fa-house text-lg"></i>
@@ -151,7 +143,6 @@
     </nav>
 
     <script>
-        // Init Realtime Firebase DB (No API Key Required for Public Realtime DB)
         const config = { databaseURL: "https://mailmarket-default-rtdb.firebaseio.com" };
         firebase.initializeApp(config);
         const db = firebase.database();
@@ -160,36 +151,69 @@
         let selectedCat = "";
         let selectedMethod = "";
 
+        // Safe Firebase Key Conversion
+        function encodeEmail(email) {
+            return email.toLowerCase().replace(/\./g, '_dot_');
+        }
+
         // AUTHENTICATION LOGIC
         function handleRegister(e) {
             e.preventDefault();
-            const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value.toLowerCase().replace('.', '_');
-            const pass = document.getElementById('regPassword').value;
+            const btn = document.getElementById('regBtn');
+            btn.innerText = "Creating Account...";
+            btn.disabled = true;
 
-            db.ref('users/' + email).once('value', snap => {
-                if(snap.exists()) return alert('Email already registered!');
-                db.ref('users/' + email).set({ name, email, pass, balance: 0, orders: [] });
-                alert('Account Created! Please Login.');
-                toggleAuth('login');
-            });
+            const name = document.getElementById('regName').value.trim();
+            const rawEmail = document.getElementById('regEmail').value.trim();
+            const pass = document.getElementById('regPassword').value.trim();
+            const emailKey = encodeEmail(rawEmail);
+
+            db.ref('users/' + emailKey).once('value')
+                .then(snap => {
+                    if(snap.exists()) {
+                        alert('Email already registered! Please login.');
+                    } else {
+                        const userData = { name, email: rawEmail, pass, balance: 0, orders: [] };
+                        db.ref('users/' + emailKey).set(userData)
+                            .then(() => {
+                                alert('Account Created Successfully! Please Login.');
+                                toggleAuth('login');
+                            });
+                    }
+                })
+                .catch(err => alert("Database Error: " + err.message))
+                .finally(() => {
+                    btn.innerText = "Create Account";
+                    btn.disabled = false;
+                });
         }
 
         function handleLogin(e) {
             e.preventDefault();
-            const email = document.getElementById('loginEmail').value.toLowerCase().replace('.', '_');
-            const pass = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginBtn');
+            btn.innerText = "Logging in...";
+            btn.disabled = true;
 
-            db.ref('users/' + email).once('value', snap => {
-                const u = snap.val();
-                if(u && u.pass === pass) {
-                    currentUser = u;
-                    localStorage.setItem('mm_user', email);
-                    loginSuccess();
-                } else {
-                    alert('Invalid Email or Password!');
-                }
-            });
+            const rawEmail = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPassword').value.trim();
+            const emailKey = encodeEmail(rawEmail);
+
+            db.ref('users/' + emailKey).once('value')
+                .then(snap => {
+                    const u = snap.val();
+                    if(u && u.pass === pass) {
+                        currentUser = u;
+                        localStorage.setItem('mm_user_key', emailKey);
+                        loginSuccess();
+                    } else {
+                        alert('Invalid Email or Password!');
+                    }
+                })
+                .catch(err => alert("Database Error: " + err.message))
+                .finally(() => {
+                    btn.innerText = "Login";
+                    btn.disabled = false;
+                });
         }
 
         function loginSuccess() {
@@ -199,9 +223,9 @@
             document.getElementById('bottomNav').classList.remove('hidden');
             document.getElementById('bottomNav').classList.add('flex');
 
-            // Sync user data
-            db.ref('users/' + currentUser.email).on('value', snap => {
-                currentUser = snap.val();
+            const emailKey = encodeEmail(currentUser.email);
+            db.ref('users/' + emailKey).on('value', snap => {
+                currentUser = snap.val() || currentUser;
                 document.getElementById('userBalance').innerText = (currentUser.balance || 0).toFixed(2);
                 document.getElementById('userName').innerText = currentUser.name;
                 renderHistory();
@@ -212,7 +236,7 @@
         }
 
         function logout() {
-            localStorage.removeItem('mm_user');
+            localStorage.removeItem('mm_user_key');
             location.reload();
         }
 
@@ -285,8 +309,9 @@
                 const orders = currentUser.orders || [];
                 orders.push({ title: p.title, acc: acc, date: new Date().toLocaleDateString() });
 
+                const emailKey = encodeEmail(currentUser.email);
                 db.ref('products/' + key + '/stock').set(p.stock);
-                db.ref('users/' + currentUser.email).update({ balance: newBal, orders: orders });
+                db.ref('users/' + emailKey).update({ balance: newBal, orders: orders });
                 alert('Purchased Successfully!');
             });
         }
@@ -309,7 +334,8 @@
             const trx = document.getElementById('depTrx').value.trim();
 
             db.ref('deposits').push({
-                user: currentUser.email,
+                userKey: encodeEmail(currentUser.email),
+                email: currentUser.email,
                 name: currentUser.name,
                 method: selectedMethod,
                 amount: amt,
@@ -361,9 +387,9 @@
 
         // Auto Login Check
         window.onload = () => {
-            const savedEmail = localStorage.getItem('mm_user');
-            if(savedEmail) {
-                db.ref('users/' + savedEmail).once('value', snap => {
+            const savedKey = localStorage.getItem('mm_user_key');
+            if(savedKey) {
+                db.ref('users/' + savedKey).once('value', snap => {
                     if(snap.exists()) {
                         currentUser = snap.val();
                         loginSuccess();
