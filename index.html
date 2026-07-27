@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="bn" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Account Store BD - Trusted Digital Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -13,155 +13,145 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-gray-100 dark:bg-slate-900 text-gray-800 dark:text-gray-100 min-h-screen pb-20 md:pb-8">
+<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen pb-20 md:pb-8">
 
-    <!-- Header / Navbar -->
-    <header class="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-50">
+    <!-- Navbar -->
+    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="showTab('shop')">
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold px-3 py-1.5 rounded-xl text-lg shadow-md">ASB</div>
+            <div class="flex items-center space-x-2 cursor-pointer" onclick="showTab('shop')">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black px-2.5 py-1 rounded-xl text-base shadow">ASB</div>
                 <div>
-                    <span class="font-extrabold text-lg leading-tight block">Account Store <span class="text-blue-600 dark:text-emerald-400">BD</span></span>
-                    <span class="text-[10px] text-gray-400 block -mt-1">Digital Accounts Hub</span>
+                    <span class="font-bold text-sm md:text-base leading-tight block">Account Store <span class="text-blue-600 dark:text-emerald-400">BD</span></span>
                 </div>
             </div>
 
-            <div class="flex items-center space-x-3">
-                <!-- User Balance Display -->
-                <div class="bg-emerald-50 dark:bg-slate-700/60 px-3 py-1.5 rounded-xl border border-emerald-200 dark:border-slate-600 flex items-center space-x-1.5">
-                    <span class="text-xs text-gray-500 dark:text-gray-300">Balance:</span>
-                    <span id="userBalanceDisplay" class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">৳০.০০</span>
+            <div class="flex items-center space-x-2">
+                <div class="bg-emerald-50 dark:bg-slate-700/60 px-2.5 py-1 rounded-xl border border-emerald-200 dark:border-slate-600 flex items-center space-x-1">
+                    <span class="text-[10px] md:text-xs text-slate-500 dark:text-slate-300">Balance:</span>
+                    <span id="userBalanceDisplay" class="font-bold text-emerald-600 dark:text-emerald-400 text-xs md:text-sm">৳০.০০</span>
                 </div>
 
-                <!-- Login Status / Logout Button -->
                 <div id="authHeaderBtn">
-                    <button onclick="showTab('auth')" class="bg-blue-600 text-white font-bold text-xs px-3 py-1.5 rounded-xl hover:bg-blue-700">Login</button>
+                    <button onclick="showTab('auth')" class="bg-blue-600 text-white font-bold text-xs px-2.5 py-1.5 rounded-xl hover:bg-blue-700">Login</button>
                 </div>
 
-                <button id="themeToggle" class="p-2 rounded-xl bg-gray-100 dark:bg-slate-700">☀️</button>
+                <button id="themeToggle" class="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-xs">☀️</button>
             </div>
         </div>
     </header>
 
-    <!-- Main Navigation Tabs (Desktop & Mobile Responsive) -->
-    <div class="max-w-7xl mx-auto px-4 mt-4 flex space-x-2 border-b border-gray-200 dark:border-slate-700 pb-2 overflow-x-auto no-scrollbar">
-        <button onclick="showTab('shop')" id="tab-shop" class="px-4 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white flex-shrink-0">🛍️ Shop</button>
-        <button onclick="showTab('deposit')" id="tab-deposit" class="px-4 py-2 rounded-xl text-xs font-bold bg-gray-200 dark:bg-slate-800 text-gray-600 dark:text-gray-300 flex-shrink-0">💳 Deposit</button>
-        <button onclick="showTab('profile')" id="tab-profile" class="px-4 py-2 rounded-xl text-xs font-bold bg-gray-200 dark:bg-slate-800 text-gray-600 dark:text-gray-300 flex-shrink-0">👤 Profile / Orders</button>
+    <!-- Navigation Tabs -->
+    <div class="max-w-7xl mx-auto px-4 mt-3 flex space-x-2 border-b border-slate-200 dark:border-slate-700 pb-2 overflow-x-auto no-scrollbar">
+        <button onclick="showTab('shop')" id="tab-shop" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-blue-600 text-white flex-shrink-0">🛍️ Shop</button>
+        <button onclick="showTab('deposit')" id="tab-deposit" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex-shrink-0">💳 Deposit</button>
+        <button onclick="showTab('profile')" id="tab-profile" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex-shrink-0">👤 Orders</button>
     </div>
 
-    <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+    <main class="max-w-7xl mx-auto px-4 py-4 space-y-5">
 
-        <!-- AUTH TAB (Login & Signup) -->
-        <div id="page-auth" class="hidden max-w-md mx-auto bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4 shadow-xl">
+        <!-- AUTH TAB -->
+        <div id="page-auth" class="hidden max-w-sm mx-auto bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 shadow-lg">
             <div class="flex border-b dark:border-slate-700 pb-2">
-                <button onclick="toggleAuthForm('login')" id="btnAuthLogin" class="w-1/2 font-bold text-sm text-blue-600 border-b-2 border-blue-600 pb-2">Login</button>
-                <button onclick="toggleAuthForm('signup')" id="btnAuthSignup" class="w-1/2 font-bold text-sm text-gray-400 pb-2">Register</button>
+                <button onclick="toggleAuthForm('login')" id="btnAuthLogin" class="w-1/2 font-bold text-xs md:text-sm text-blue-600 border-b-2 border-blue-600 pb-2">Login</button>
+                <button onclick="toggleAuthForm('signup')" id="btnAuthSignup" class="w-1/2 font-bold text-xs md:text-sm text-slate-400 pb-2">Register</button>
             </div>
 
-            <!-- Login Form -->
             <form id="formLogin" onsubmit="handleLogin(event)" class="space-y-3">
                 <div>
-                    <label class="block text-xs font-semibold mb-1">Email Address</label>
-                    <input type="email" id="loginEmail" required class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-3 text-xs focus:outline-none">
+                    <label class="block text-[11px] font-semibold mb-1">Email</label>
+                    <input type="email" id="loginEmail" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold mb-1">Password</label>
-                    <input type="password" id="loginPass" required class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-3 text-xs focus:outline-none">
+                    <label class="block text-[11px] font-semibold mb-1">Password</label>
+                    <input type="password" id="loginPass" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:outline-none">
                 </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition text-xs">Login Now</button>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs">Login</button>
             </form>
 
-            <!-- Signup Form -->
             <form id="formSignup" onsubmit="handleSignup(event)" class="space-y-3 hidden">
                 <div>
-                    <label class="block text-xs font-semibold mb-1">Your Full Name</label>
-                    <input type="text" id="regName" required class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-3 text-xs focus:outline-none">
+                    <label class="block text-[11px] font-semibold mb-1">Name</label>
+                    <input type="text" id="regName" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold mb-1">Email Address</label>
-                    <input type="email" id="regEmail" required class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-3 text-xs focus:outline-none">
+                    <label class="block text-[11px] font-semibold mb-1">Email</label>
+                    <input type="email" id="regEmail" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold mb-1">Set Password</label>
-                    <input type="password" id="regPass" required class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-3 text-xs focus:outline-none">
+                    <label class="block text-[11px] font-semibold mb-1">Password</label>
+                    <input type="password" id="regPass" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:outline-none">
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition text-xs">Register Account</button>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs">Register</button>
             </form>
         </div>
 
         <!-- SHOP TAB -->
-        <div id="page-shop" class="space-y-6">
-            <!-- Dynamic Main Categories Bar -->
+        <div id="page-shop" class="space-y-5">
             <div>
-                <h2 class="text-sm font-bold mb-2">Categories</h2>
-                <div class="flex space-x-3 overflow-x-auto no-scrollbar" id="dynamicCategoryBar">
-                    <p class="text-xs text-gray-400">Loading categories...</p>
+                <h2 class="text-xs font-bold mb-2">Categories</h2>
+                <div class="flex space-x-2 overflow-x-auto no-scrollbar" id="dynamicCategoryBar">
+                    <p class="text-xs text-slate-400">Loading categories...</p>
                 </div>
             </div>
 
-            <!-- Dynamic Category Description Box -->
-            <div id="categoryDescBox" class="hidden bg-blue-50 dark:bg-slate-800 border border-blue-200 dark:border-slate-700 p-4 rounded-2xl text-xs">
-                <h3 id="catDescTitle" class="font-bold text-blue-600 dark:text-blue-400 mb-1">Category Info</h3>
-                <p id="catDescText" class="text-gray-600 dark:text-gray-300"></p>
+            <div id="categoryDescBox" class="hidden bg-blue-50 dark:bg-slate-800 border border-blue-200 dark:border-slate-700 p-3 rounded-xl text-xs">
+                <h3 id="catDescTitle" class="font-bold text-blue-600 dark:text-blue-400 mb-0.5">Category Info</h3>
+                <p id="catDescText" class="text-slate-600 dark:text-slate-300 text-[11px]"></p>
             </div>
 
-            <!-- Products Grid (PC Grid Responsive) -->
+            <!-- Mobile & PC Grid Optimization -->
             <div class="space-y-3">
-                <h2 class="text-sm font-bold">Available Products</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="dynamicProductsContainer">
-                    <p class="text-xs text-gray-400">No products available. Admin needs to add categories and products.</p>
+                <h2 class="text-xs font-bold">Products Stock</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="dynamicProductsContainer">
+                    <p class="text-xs text-slate-400">No products available.</p>
                 </div>
             </div>
         </div>
 
         <!-- DEPOSIT TAB -->
-        <div id="page-deposit" class="hidden max-w-lg mx-auto bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4">
-            <h2 class="text-lg font-bold text-center">Add Funds / Deposit</h2>
+        <div id="page-deposit" class="hidden max-w-md mx-auto bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4">
+            <h2 class="text-base font-bold text-center">Add Funds / Deposit</h2>
 
-            <!-- Payment Method Logos & Buttons -->
             <div>
-                <label class="block text-xs font-semibold mb-2">Select Payment Method:</label>
-                <div class="grid grid-cols-3 gap-3" id="paymentMethodsButtons">
-                    <!-- Loaded Dynamically -->
-                </div>
+                <label class="block text-xs font-semibold mb-2">Payment Method Select Koro:</label>
+                <div class="grid grid-cols-3 gap-2" id="paymentMethodsButtons"></div>
             </div>
             
             <div class="bg-amber-50 dark:bg-slate-900 border border-amber-200 dark:border-slate-700 p-3 rounded-xl text-xs text-amber-800 dark:text-amber-300" id="depositInstruction">
-                Please select a payment method above to view the number.
+                Select a payment method above.
             </div>
 
-            <form onsubmit="handleDepositSubmit(event)" class="space-y-3 pt-2">
+            <form onsubmit="handleDepositSubmit(event)" class="space-y-3 pt-1">
                 <div>
-                    <label class="block text-xs font-semibold mb-1">Deposit Amount (BDT) <span class="text-red-500 font-normal">(Min ৳25)</span></label>
-                    <input type="number" id="depAmount" min="25" required placeholder="Minimum 25 BDT" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-3 text-xs focus:outline-none">
+                    <label class="block text-[11px] font-semibold mb-1">Deposit Amount (BDT) <span class="text-red-500 font-normal">(Min ৳25)</span></label>
+                    <input type="number" id="depAmount" min="25" required placeholder="Minimum 25 BDT" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold mb-1">Transaction ID (TrxID)</label>
-                    <input type="text" id="depTrx" required placeholder="e.g. 9J8A7K2M" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-3 text-xs font-mono uppercase focus:outline-none">
+                    <label class="block text-[11px] font-semibold mb-1">Transaction ID (TrxID)</label>
+                    <input type="text" id="depTrx" required placeholder="e.g. 9J8A7K2M" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs font-mono uppercase focus:outline-none">
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition text-xs">Submit Request</button>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs">Submit Request</button>
             </form>
         </div>
 
         <!-- PROFILE / ORDERS TAB -->
-        <div id="page-profile" class="hidden space-y-6 max-w-4xl mx-auto">
-            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-2 flex justify-between items-center">
+        <div id="page-profile" class="hidden space-y-4 max-w-3xl mx-auto">
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 flex justify-between items-center">
                 <div>
-                    <h2 class="text-lg font-bold" id="profileUserName">User Profile</h2>
-                    <p class="text-xs text-gray-400" id="profileUserEmail">Guest User</p>
-                    <p class="text-xs text-gray-400 mt-1">Current Balance: <strong class="text-emerald-500 font-bold" id="profileBalanceText">৳০.০০</strong></p>
+                    <h2 class="text-sm font-bold" id="profileUserName">User Profile</h2>
+                    <p class="text-[11px] text-slate-400" id="profileUserEmail">Guest User</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Balance: <strong class="text-emerald-500 font-bold" id="profileBalanceText">৳০.০০</strong></p>
                 </div>
                 <button onclick="handleLogout()" class="bg-red-500/10 text-red-500 font-bold text-xs px-3 py-1.5 rounded-xl hover:bg-red-500/20">Logout</button>
             </div>
 
-            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4">
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-sm font-bold">Purchased Accounts / Order History</h2>
-                    <button id="copyAllBtn" onclick="copyPurchasedAccounts()" class="hidden bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded-xl hover:bg-blue-700">📋 Copy All</button>
+                    <h2 class="text-xs font-bold">Purchased Accounts History</h2>
+                    <button id="copyAllBtn" onclick="copyPurchasedAccounts()" class="hidden bg-blue-600 text-white text-xs font-bold px-2.5 py-1 rounded-xl">📋 Copy All</button>
                 </div>
                 <div id="purchasedListContainer" class="space-y-2">
-                    <p class="text-xs text-gray-400">No purchase history found.</p>
+                    <p class="text-xs text-slate-400">No purchase history found.</p>
                 </div>
             </div>
         </div>
@@ -169,7 +159,6 @@
     </main>
 
     <script>
-        // Store State Management
         let currentUser = JSON.parse(localStorage.getItem('asb_active_user')) || null;
         let selectedPaymentMethod = null;
 
@@ -181,17 +170,17 @@
                 
                 document.getElementById('userBalanceDisplay').innerText = `৳${(userObj.balance || 0).toFixed(2)}`;
                 document.getElementById('profileBalanceText').innerText = `৳${(userObj.balance || 0).toFixed(2)}`;
-                document.getElementById('profileUserName').innerText = userObj.name || "User Profile";
+                document.getElementById('profileUserName').innerText = userObj.name || "User";
                 document.getElementById('profileUserEmail').innerText = userObj.email;
 
-                authHeader.innerHTML = `<span class="text-xs font-bold text-emerald-500">${userObj.name}</span>`;
+                authHeader.innerHTML = `<span class="text-xs font-bold text-emerald-500 truncate max-w-[80px] block">${userObj.name}</span>`;
             } else {
                 document.getElementById('userBalanceDisplay').innerText = `৳০.০০`;
                 document.getElementById('profileBalanceText').innerText = `৳০.০০`;
                 document.getElementById('profileUserName').innerText = "Guest User";
                 document.getElementById('profileUserEmail').innerText = "Not logged in";
 
-                authHeader.innerHTML = `<button onclick="showTab('auth')" class="bg-blue-600 text-white font-bold text-xs px-3 py-1.5 rounded-xl hover:bg-blue-700">Login</button>`;
+                authHeader.innerHTML = `<button onclick="showTab('auth')" class="bg-blue-600 text-white font-bold text-xs px-2.5 py-1.5 rounded-xl hover:bg-blue-700">Login</button>`;
             }
         }
 
@@ -201,70 +190,71 @@
             const categories = JSON.parse(localStorage.getItem('asb_categories')) || [];
             const subCategories = JSON.parse(localStorage.getItem('asb_subcategories')) || [];
 
-            // Categories Bar
+            // Render Categories
             const catContainer = document.getElementById('dynamicCategoryBar');
             if(categories.length === 0) {
-                catContainer.innerHTML = `<p class="text-xs text-gray-400">No categories available.</p>`;
+                catContainer.innerHTML = `<p class="text-xs text-slate-400">No categories found.</p>`;
             } else {
                 catContainer.innerHTML = categories.map(c => `
-                    <button onclick="selectCategory('${c.name}', '${c.desc}')" class="flex-shrink-0 bg-white dark:bg-slate-800 border-2 border-transparent p-3 rounded-2xl flex items-center space-x-2 min-w-[130px] cursor-pointer hover:border-blue-500">
+                    <button onclick="selectCategory('${c.name}', '${c.desc}')" class="flex-shrink-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-2 rounded-xl flex items-center space-x-1 cursor-pointer hover:border-blue-500">
                         <span class="font-bold text-xs">${c.name}</span>
                     </button>
                 `).join('');
             }
 
-            // Products Grid
+            // Render Products (Fixes Mobile Display Issue)
             const prodContainer = document.getElementById('dynamicProductsContainer');
             if(subCategories.length === 0) {
-                prodContainer.innerHTML = `<p class="text-xs text-gray-400">No products in stock.</p>`;
+                prodContainer.innerHTML = `<p class="text-xs text-slate-400">No products available in stock.</p>`;
             } else {
-                prodContainer.innerHTML = subCategories.map(s => `
-                    <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-3 flex flex-col justify-between">
-                        <div class="space-y-2">
+                prodContainer.innerHTML = subCategories.map(s => {
+                    const stockCount = (s.stock && Array.isArray(s.stock)) ? s.stock.length : 0;
+                    return `
+                    <div class="bg-white dark:bg-slate-800 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 flex flex-col justify-between space-y-3 shadow-sm">
+                        <div class="space-y-1.5">
                             <div class="flex justify-between items-start">
-                                <h3 class="font-bold text-sm">${s.name}</h3>
-                                <span class="text-sm font-extrabold text-blue-600 dark:text-emerald-400">৳${s.price}</span>
+                                <h3 class="font-bold text-xs md:text-sm leading-snug">${s.name}</h3>
+                                <span class="text-xs md:text-sm font-extrabold text-blue-600 dark:text-emerald-400">৳${s.price}</span>
                             </div>
-                            <p class="text-[11px] text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-slate-900 p-2 rounded-xl border border-gray-100 dark:border-slate-800 whitespace-pre-line">${s.desc || 'No details provided.'}</p>
+                            <p class="text-[10px] md:text-[11px] text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 p-2 rounded-xl border border-slate-100 dark:border-slate-800 whitespace-pre-line">${s.desc || 'No description'}</p>
                         </div>
                         <div class="flex justify-between items-center pt-2 text-xs border-t dark:border-slate-700">
-                            <span class="text-gray-400">Stock: <strong class="text-emerald-500 font-bold">${(s.stock || []).length} pcs</strong></span>
-                            <div class="flex items-center space-x-2">
-                                <input type="number" id="qty-${s.id}" min="1" max="${(s.stock || []).length}" value="1" class="w-12 p-1 bg-gray-100 dark:bg-slate-900 border rounded text-center text-xs">
-                                <button onclick="buyProduct('${s.id}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-1.5 rounded-xl transition">Buy</button>
+                            <span class="text-[11px] text-slate-400">Stock: <strong class="text-emerald-500 font-bold">${stockCount} pcs</strong></span>
+                            <div class="flex items-center space-x-1.5">
+                                <input type="number" id="qty-${s.id}" min="1" max="${stockCount}" value="1" class="w-10 p-1 bg-slate-100 dark:bg-slate-900 border rounded-lg text-center text-xs">
+                                <button onclick="buyProduct('${s.id}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-1 rounded-xl text-xs transition">Buy</button>
                             </div>
                         </div>
                     </div>
-                `).join('');
+                `}).join('');
             }
 
             loadPaymentMethods();
             loadPurchases();
         }
 
-        // Auth Logic
         function toggleAuthForm(type) {
             if(type === 'login') {
                 document.getElementById('formLogin').classList.remove('hidden');
                 document.getElementById('formSignup').classList.add('hidden');
-                document.getElementById('btnAuthLogin').className = "w-1/2 font-bold text-sm text-blue-600 border-b-2 border-blue-600 pb-2";
-                document.getElementById('btnAuthSignup').className = "w-1/2 font-bold text-sm text-gray-400 pb-2";
+                document.getElementById('btnAuthLogin').className = "w-1/2 font-bold text-xs text-blue-600 border-b-2 border-blue-600 pb-2";
+                document.getElementById('btnAuthSignup').className = "w-1/2 font-bold text-xs text-slate-400 pb-2";
             } else {
                 document.getElementById('formLogin').classList.add('hidden');
                 document.getElementById('formSignup').classList.remove('hidden');
-                document.getElementById('btnAuthSignup').className = "w-1/2 font-bold text-sm text-blue-600 border-b-2 border-blue-600 pb-2";
-                document.getElementById('btnAuthLogin').className = "w-1/2 font-bold text-sm text-gray-400 pb-2";
+                document.getElementById('btnAuthSignup').className = "w-1/2 font-bold text-xs text-blue-600 border-b-2 border-blue-600 pb-2";
+                document.getElementById('btnAuthLogin').className = "w-1/2 font-bold text-xs text-slate-400 pb-2";
             }
         }
 
         function handleSignup(e) {
             e.preventDefault();
             const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value.toLowerCase();
+            const email = document.getElementById('regEmail').value.toLowerCase().trim();
             const pass = document.getElementById('regPass').value;
 
             const users = JSON.parse(localStorage.getItem('asb_users')) || [];
-            if(users.find(u => u.email === email)) return alert('Email already registered!');
+            if(users.find(u => u.email === email)) return alert('Email already exists!');
 
             const newUser = { name, email, pass, balance: 0, purchases: [] };
             users.push(newUser);
@@ -279,18 +269,18 @@
 
         function handleLogin(e) {
             e.preventDefault();
-            const email = document.getElementById('loginEmail').value.toLowerCase();
+            const email = document.getElementById('loginEmail').value.toLowerCase().trim();
             const pass = document.getElementById('loginPass').value;
 
             const users = JSON.parse(localStorage.getItem('asb_users')) || [];
             const user = users.find(u => u.email === email && u.pass === pass);
 
-            if(!user) return alert('Invalid Email or Password!');
+            if(!user) return alert('Wrong Email or Password!');
 
             localStorage.setItem('asb_active_user', JSON.stringify(user));
             currentUser = user;
 
-            alert('Logged in successfully!');
+            alert('Logged in!');
             showTab('shop');
             loadStoreData();
         }
@@ -298,22 +288,19 @@
         function handleLogout() {
             localStorage.removeItem('asb_active_user');
             currentUser = null;
-            alert('Logged Out!');
             showTab('shop');
             loadStoreData();
         }
 
-        // Category Info Handler
         function selectCategory(name, desc) {
             document.getElementById('categoryDescBox').classList.remove('hidden');
-            document.getElementById('catDescTitle').innerText = name + " Description:";
-            document.getElementById('catDescText').innerText = desc || "No description set.";
+            document.getElementById('catDescTitle').innerText = name;
+            document.getElementById('catDescText').innerText = desc || "No details.";
         }
 
-        // Purchase Logic
         function buyProduct(subId) {
             if(!currentUser) {
-                alert('Please login first to buy products!');
+                alert('Please Login first!');
                 showTab('auth');
                 return;
             }
@@ -325,17 +312,16 @@
             const users = JSON.parse(localStorage.getItem('asb_users')) || [];
             const userIdx = users.findIndex(u => u.email === currentUser.email);
 
-            if(!sub || !sub.stock || sub.stock.length < qty) return alert('Not enough stock available!');
+            if(!sub || !sub.stock || sub.stock.length < qty) return alert('Stock low!');
 
             const totalPrice = sub.price * qty;
-            if(users[userIdx].balance < totalPrice) return alert(`Insufficient Balance! Required: ৳${totalPrice}`);
+            if(users[userIdx].balance < totalPrice) return alert(`Insufficient Balance! Needed: ৳${totalPrice}`);
 
-            // Deduct & Transact
             users[userIdx].balance -= totalPrice;
             const purchased = sub.stock.splice(0, qty);
 
             if(!users[userIdx].purchases) users[userIdx].purchases = [];
-            users[userIdx].purchases.push({ date: new Date().toLocaleString(), item: sub.name, items: purchased });
+            users[userIdx].purchases.push({ date: new Date().toLocaleDateString(), item: sub.name, items: purchased });
 
             localStorage.setItem('asb_users', JSON.stringify(users));
             localStorage.setItem('asb_active_user', JSON.stringify(users[userIdx]));
@@ -345,19 +331,18 @@
             loadStoreData();
         }
 
-        // Payment Method Buttons & Logos Logic
         function loadPaymentMethods() {
             const methods = JSON.parse(localStorage.getItem('asb_payments')) || [
-                { name: 'bKash', type: 'Personal', number: '01700000000', logo: 'https://cdn-icons-png.flaticon.com/512/888/888870.png' },
-                { name: 'Nagad', type: 'Personal', number: '01800000000', logo: 'https://cdn-icons-png.flaticon.com/512/888/888870.png' },
-                { name: 'Rocket', type: 'Personal', number: '01900000000', logo: 'https://cdn-icons-png.flaticon.com/512/888/888870.png' }
+                { name: 'bKash', type: 'Personal', number: '01700000000' },
+                { name: 'Nagad', type: 'Personal', number: '01800000000' },
+                { name: 'Rocket', type: 'Personal', number: '01900000000' }
             ];
 
             const container = document.getElementById('paymentMethodsButtons');
             container.innerHTML = methods.map((m, idx) => `
-                <button type="button" onclick="selectPaymentMethod(${idx}, '${m.name}', '${m.type}', '${m.number}')" id="payBtn-${idx}" class="pay-method-btn p-3 border dark:border-slate-700 bg-gray-50 dark:bg-slate-700/50 rounded-xl font-bold text-xs flex flex-col items-center justify-center space-y-1 hover:border-blue-500">
-                    <span class="text-sm font-extrabold text-blue-600 dark:text-emerald-400">${m.name}</span>
-                    <span class="text-[9px] text-gray-400 font-normal">${m.type}</span>
+                <button type="button" onclick="selectPaymentMethod(${idx}, '${m.name}', '${m.type}', '${m.number}')" id="payBtn-${idx}" class="pay-method-btn p-2.5 border dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 rounded-xl font-bold text-xs flex flex-col items-center justify-center space-y-0.5 hover:border-blue-500">
+                    <span class="text-xs font-extrabold text-blue-600 dark:text-emerald-400">${m.name}</span>
+                    <span class="text-[9px] text-slate-400 font-normal">${m.type}</span>
                 </button>
             `).join('');
         }
@@ -369,28 +354,28 @@
             selectedPaymentMethod = { name, type, number };
             document.getElementById('depositInstruction').innerHTML = `
                 <div class="space-y-1">
-                    <p class="font-bold text-sm text-blue-600">${name} (${type}) Number:</p>
-                    <p class="font-mono text-base font-extrabold bg-white dark:bg-slate-800 p-2 rounded-lg border border-amber-200 dark:border-slate-700 text-center select-all">${number}</p>
-                    <p class="text-[11px] text-gray-500">Please send money (Minimum ৳25) to the number above, then enter the TrxID below.</p>
+                    <p class="font-bold text-xs text-blue-600">${name} (${type}) Number:</p>
+                    <p class="font-mono text-sm font-black bg-white dark:bg-slate-800 p-2 rounded-lg border border-amber-200 dark:border-slate-700 text-center select-all">${number}</p>
+                    <p class="text-[10px] text-slate-500">Send money (Min ৳25) to this number and submit TrxID below.</p>
                 </div>
             `;
         }
 
         function handleDepositSubmit(e) {
             e.preventDefault();
-            if(!currentUser) return alert('Please login first to submit deposit!');
-            if(!selectedPaymentMethod) return alert('Please select a payment method!');
+            if(!currentUser) return alert('Login first!');
+            if(!selectedPaymentMethod) return alert('Select payment method!');
 
             const amount = parseFloat(document.getElementById('depAmount').value);
-            const trx = document.getElementById('depTrx').value;
+            const trx = document.getElementById('depTrx').value.trim();
 
-            if(amount < 25) return alert('Minimum deposit amount is ৳25!');
+            if(amount < 25) return alert('Minimum deposit is ৳25!');
 
             const requests = JSON.parse(localStorage.getItem('asb_deposit_requests')) || [];
             requests.push({ id: Date.now(), email: currentUser.email, amount, trx, method: selectedPaymentMethod.name, status: 'Pending' });
             localStorage.setItem('asb_deposit_requests', JSON.stringify(requests));
 
-            alert('Deposit request submitted! Waiting for Admin approval.');
+            alert('Deposit request submitted successfully!');
             e.target.reset();
         }
 
@@ -403,7 +388,7 @@
             const copyBtn = document.getElementById('copyAllBtn');
 
             if(!userObj.purchases || userObj.purchases.length === 0) {
-                container.innerHTML = `<p class="text-xs text-gray-400">No purchase history found.</p>`;
+                container.innerHTML = `<p class="text-xs text-slate-400">No purchase history found.</p>`;
                 copyBtn.classList.add('hidden');
                 return;
             }
@@ -414,24 +399,19 @@
             userObj.purchases.forEach(o => {
                 o.items.forEach(i => allItems.push(i));
                 html += `
-                    <div class="bg-gray-50 dark:bg-slate-900 p-3 rounded-xl border border-gray-200 dark:border-slate-700 text-xs space-y-1">
+                    <div class="bg-slate-50 dark:bg-slate-900 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs space-y-1">
                         <div class="flex justify-between font-bold text-blue-500">
                             <span>${o.item}</span>
-                            <span class="text-gray-400 text-[10px]">${o.date}</span>
+                            <span class="text-slate-400 text-[10px]">${o.date}</span>
                         </div>
-                        <div class="font-mono text-emerald-500 bg-white dark:bg-slate-800 p-2 rounded border border-gray-100 dark:border-slate-700 select-all">${o.items.join('<br>')}</div>
+                        <div class="font-mono text-emerald-500 bg-white dark:bg-slate-800 p-2 rounded border border-slate-100 dark:border-slate-700 select-all text-[11px] break-all">${o.items.join('<br>')}</div>
                     </div>
                 `;
             });
 
             container.innerHTML = html;
-
-            // SHOW "COPY ALL" BUTTON ONLY IF MORE THAN 1 ITEM IS BOUGHT
-            if(allItems.length > 1) {
-                copyBtn.classList.remove('hidden');
-            } else {
-                copyBtn.classList.add('hidden');
-            }
+            if(allItems.length > 1) copyBtn.classList.remove('hidden');
+            else copyBtn.classList.add('hidden');
         }
 
         function copyPurchasedAccounts() {
@@ -440,18 +420,18 @@
             let list = [];
             userObj.purchases.forEach(o => o.items.forEach(i => list.push(i)));
             navigator.clipboard.writeText(list.join('\n'));
-            alert('All purchased accounts copied!');
+            alert('All items copied!');
         }
 
         function showTab(tab) {
             ['shop', 'deposit', 'profile', 'auth'].forEach(t => {
                 document.getElementById(`page-${t}`).classList.add('hidden');
                 const btn = document.getElementById(`tab-${t}`);
-                if(btn) btn.className = "px-4 py-2 rounded-xl text-xs font-bold bg-gray-200 dark:bg-slate-800 text-gray-600 dark:text-gray-300 flex-shrink-0";
+                if(btn) btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex-shrink-0";
             });
             document.getElementById(`page-${tab}`).classList.remove('hidden');
             const activeBtn = document.getElementById(`tab-${tab}`);
-            if(activeBtn) activeBtn.className = "px-4 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white flex-shrink-0";
+            if(activeBtn) activeBtn.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-blue-600 text-white flex-shrink-0";
         }
 
         document.getElementById('themeToggle').addEventListener('click', () => document.documentElement.classList.toggle('dark'));
