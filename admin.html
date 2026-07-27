@@ -1,266 +1,567 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Account Store BD</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>tailwind.config = { darkMode: 'class' }</script>
+    <title>Admin Dashboard - Mail Market</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-body: #0b132b;
+            --card-bg: #1c2541;
+            --text-main: #ffffff;
+            --text-sub: #cbd5e1;
+            --border-color: #3a506b;
+            --input-bg: #10172a;
+            --accent-blue: #3b82f6;
+            --accent-yellow: #f59e0b;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            padding-bottom: 50px;
+        }
+
+        .top-navbar {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 20px;
+        }
+
+        .card-box {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .form-control, .form-select {
+            background-color: var(--input-bg) !important;
+            color: #ffffff !important;
+            border: 1px solid var(--border-color) !important;
+            border-radius: 10px;
+            padding: 12px 14px;
+        }
+
+        .form-control::placeholder { color: #94a3b8 !important; }
+
+        .btn-yellow {
+            background-color: #f59e0b;
+            color: #000;
+            font-weight: 700;
+            border-radius: 10px;
+        }
+        .btn-yellow:hover { background-color: #d97706; color: #000; }
+
+        .btn-green {
+            background-color: #10b981;
+            color: #fff;
+            font-weight: 700;
+            border-radius: 10px;
+        }
+        .btn-green:hover { background-color: #059669; color: #fff; }
+
+        .table-dark-custom {
+            background: var(--input-bg);
+            color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table-dark-custom th { background: #1e293b; color: #94a3b8; border-color: var(--border-color); }
+        .table-dark-custom td { border-color: var(--border-color); }
+
+        /* Admin Lock Overlay */
+        #admin-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(11, 19, 43, 0.95);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 dark:bg-slate-900 text-gray-800 dark:text-gray-100 min-h-screen">
+<body>
 
-    <!-- Admin Login Protection Modal -->
-    <div id="loginModal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 max-w-sm w-full space-y-4">
-            <h2 class="text-xl font-bold text-center">Admin Passcode</h2>
-            <input type="password" id="adminPassInput" placeholder="Enter Security Password..." class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-3 text-sm focus:outline-none">
-            <button onclick="checkAdminPassword()" class="w-full bg-red-600 text-white font-bold py-3 rounded-xl text-sm">Login</button>
+<!-- Admin Password Protection Modal -->
+<div id="admin-lock-screen">
+    <div class="card-box p-4 text-center" style="max-width: 380px; width: 90%;">
+        <div class="mb-3">
+            <i class="fa-solid fa-lock text-warning fs-1"></i>
+        </div>
+        <h5 class="fw-bold text-white mb-2">Admin Access Required</h5>
+        <p class="text-sub small mb-3">Please enter your admin password to continue</p>
+        <input type="password" id="admin-pass-input" class="form-control text-center mb-3" placeholder="Enter Password">
+        <button onclick="checkAdminPassword()" class="btn btn-primary w-100 fw-bold py-2">Unlock Panel</button>
+    </div>
+</div>
+
+<!-- Header -->
+<div class="top-navbar d-flex justify-content-between align-items-center">
+    <h4 class="m-0 fw-bold text-primary"><i class="fa-solid fa-shield-halved me-2"></i>Admin Dashboard</h4>
+    <button onclick="lockPanel()" class="btn btn-danger btn-sm fw-bold px-3 py-2" style="border-radius: 8px;">Lock Panel</button>
+</div>
+
+<div class="container mt-4" style="max-width: 650px;">
+
+    <!-- Top Statistics Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-4">
+            <div class="stat-card">
+                <span class="small text-sub d-block mb-1 fw-semibold">Total Users</span>
+                <div class="stat-number text-info" id="stat-users">0</div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="stat-card">
+                <span class="small text-sub d-block mb-1 fw-semibold">Pending Dep.</span>
+                <div class="stat-number text-warning" id="stat-pending">0</div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="stat-card">
+                <span class="small text-sub d-block mb-1 fw-semibold">Total Stock</span>
+                <div class="stat-number text-success" id="stat-stock">0</div>
+            </div>
         </div>
     </div>
 
-    <!-- Reject Reason Modal -->
-    <div id="rejectModal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[110] flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl max-w-sm w-full space-y-3">
-            <h3 class="font-bold text-sm">Reason for Rejection</h3>
-            <textarea id="rejectReasonText" placeholder="Enter reason (e.g. Invalid TrxID)" class="w-full bg-gray-50 dark:bg-slate-900 border p-2 rounded-xl text-xs h-20 focus:outline-none"></textarea>
-            <div class="flex justify-end space-x-2">
-                <button onclick="closeRejectModal()" class="px-3 py-1.5 text-xs bg-gray-200 dark:bg-slate-700 rounded-lg">Cancel</button>
-                <button onclick="confirmRejectDeposit()" class="px-3 py-1.5 text-xs bg-red-600 text-white font-bold rounded-lg">Reject Request</button>
+    <!-- User Balance Control Panel (NEW) -->
+    <div class="card-box p-4 mb-4 border-info">
+        <h6 class="fw-bold mb-3 text-info"><i class="fa-solid fa-wallet me-2"></i>User Balance Control (Add / Remove)</h6>
+        
+        <div class="mb-3">
+            <label class="small text-sub mb-1">Target User Email</label>
+            <input type="email" id="bal-user-email" class="form-control" placeholder="user@gmail.com">
+        </div>
+
+        <div class="mb-3">
+            <label class="small text-sub mb-1">Amount (৳)</label>
+            <input type="number" id="bal-user-amount" class="form-control" placeholder="100.00">
+        </div>
+
+        <div class="row g-2">
+            <div class="col-6">
+                <button onclick="modifyUserBalance('add')" class="btn btn-success w-100 fw-bold py-2">
+                    <i class="fa-solid fa-plus me-1"></i> Add Balance
+                </button>
+            </div>
+            <div class="col-6">
+                <button onclick="modifyUserBalance('remove')" class="btn btn-danger w-100 fw-bold py-2">
+                    <i class="fa-solid fa-minus me-1"></i> Deduct Balance
+                </button>
             </div>
         </div>
     </div>
 
-    <div id="adminContent" class="hidden">
-        <header class="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-50 p-4">
-            <div class="max-w-7xl mx-auto flex justify-between items-center">
-                <h1 class="font-bold text-lg text-red-500">Admin Control Panel</h1>
-                <a href="index.html" class="text-xs text-blue-500 font-bold hover:underline">View User Site ↗</a>
-            </div>
-        </header>
+    <!-- Add Mails / Stock Data -->
+    <div class="card-box p-4 mb-4">
+        <h6 class="fw-bold mb-3 text-warning"><i class="fa-solid fa-cloud-arrow-up me-2"></i>Add Mails / Stock Data</h6>
+        
+        <div class="mb-3">
+            <label class="small text-sub mb-1">Select Category Item</label>
+            <select id="stock-item-select" class="form-select"></select>
+        </div>
 
-        <main class="max-w-7xl mx-auto px-4 py-6 space-y-8">
+        <div class="mb-3">
+            <label class="small text-sub mb-1">Paste Mails (Line by line format: mail|pass|recovery)</label>
+            <textarea id="stock-mails-input" class="form-control" rows="4" placeholder="user1@outlook.com|pass123&#10;user2@outlook.com|pass456"></textarea>
+        </div>
 
-            <!-- Summary Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-gray-200 dark:border-slate-700">
-                    <p class="text-xs text-gray-400">Total Registered Users</p>
-                    <p class="text-2xl font-extrabold text-blue-500" id="statUsers">0</p>
-                </div>
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-gray-200 dark:border-slate-700">
-                    <p class="text-xs text-gray-400">Total Available Stock</p>
-                    <p class="text-2xl font-extrabold text-emerald-500" id="statStock">0 pcs</p>
-                </div>
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-gray-200 dark:border-slate-700">
-                    <p class="text-xs text-gray-400">Pending Deposits</p>
-                    <p class="text-2xl font-extrabold text-amber-500" id="statDeposits">0</p>
-                </div>
-            </div>
-
-            <!-- MANUAL USER BALANCE MANAGEMENT -->
-            <section class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4">
-                <h2 class="text-md font-bold text-emerald-500">Add / Modify User Balance</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <input type="email" id="targetUserEmail" placeholder="User Registered Email" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
-                    <input type="number" id="targetUserAmount" placeholder="Amount (BDT e.g. 100)" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
-                    <div class="flex space-x-2">
-                        <button onclick="modifyUserBalance('add')" class="w-1/2 bg-emerald-600 text-white font-bold py-2 rounded-xl text-xs">Add Funds</button>
-                        <button onclick="modifyUserBalance('deduct')" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Deduct Funds</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ADD MAIN CATEGORY -->
-            <section class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4">
-                <h2 class="text-md font-bold">1. Create Main Category</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <input type="text" id="catName" placeholder="Category Name (e.g. Gmail)" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
-                    <input type="text" id="catDesc" placeholder="Category Description..." class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
-                </div>
-                <button onclick="addCategory()" class="bg-blue-600 text-white font-bold px-4 py-2 rounded-xl text-xs">Add Category</button>
-            </section>
-
-            <!-- ADD SUB-CATEGORY & STOCK -->
-            <section class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4">
-                <h2 class="text-md font-bold">2. Add Sub-Category & Stock</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <select id="subCatParent" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs"></select>
-                    <input type="text" id="subCatName" placeholder="Sub-Category Name" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
-                    <input type="number" id="subCatPrice" step="0.01" placeholder="Price (BDT)" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
-                </div>
-                <textarea id="subCatDesc" placeholder="Sub-Category Description..." class="w-full bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs h-16"></textarea>
-                <textarea id="subCatStock" placeholder="Paste Accounts List (One per line e.g. email:pass)" class="w-full bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs h-24 font-mono"></textarea>
-                <button onclick="addSubCategory()" class="bg-emerald-600 text-white font-bold px-4 py-2 rounded-xl text-xs">Upload Sub-Category & Stock</button>
-            </section>
-
-            <!-- SET PAYMENT METHOD -->
-            <section class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4">
-                <h2 class="text-md font-bold">3. Set Payment Methods</h2>
-                <div class="grid grid-cols-3 gap-3">
-                    <input type="text" id="payName" placeholder="bKash / Nagad / Rocket" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
-                    <input type="text" id="payType" placeholder="Personal / Agent" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
-                    <input type="text" id="payNum" placeholder="Phone Number" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
-                </div>
-                <button onclick="addPaymentMethod()" class="bg-purple-600 text-white font-bold px-4 py-2 rounded-xl text-xs">Save Payment Method</button>
-            </section>
-
-            <!-- PENDING DEPOSITS -->
-            <section class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4">
-                <h2 class="text-md font-bold">4. Deposit Requests</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-xs text-left">
-                        <thead>
-                            <tr class="bg-gray-100 dark:bg-slate-900">
-                                <th class="p-2">Email</th>
-                                <th class="p-2">Method</th>
-                                <th class="p-2">Amount</th>
-                                <th class="p-2">TrxID</th>
-                                <th class="p-2">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="depositRequestsTable"></tbody>
-                    </table>
-                </div>
-            </section>
-
-        </main>
+        <button onclick="uploadStockMails()" class="btn btn-yellow w-100 py-2">Upload Stock Mails</button>
     </div>
 
-    <script>
-        const ADMIN_PASSWORD = "HABIBI@RAJU143";
-        let targetRejectId = null;
+    <!-- Publish New Category Item -->
+    <div class="card-box p-4 mb-4">
+        <h6 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-folder-plus me-2"></i>Publish New Category Item</h6>
+        
+        <div class="mb-3">
+            <label class="small text-sub mb-1">Category (Choose from Dropdown or Write New)</label>
+            <div class="input-group">
+                <select id="cat-dropdown" class="form-select" onchange="syncCategoryInput(this)">
+                    <option value="">-- Select Existing Category --</option>
+                </select>
+            </div>
+            <input type="text" id="cat-manual-input" class="form-control mt-2" placeholder="Or type new category name e.g. Outlook">
+        </div>
 
-        function checkAdminPassword() {
-            if(document.getElementById('adminPassInput').value === ADMIN_PASSWORD) {
-                document.getElementById('loginModal').classList.add('hidden');
-                document.getElementById('adminContent').classList.remove('hidden');
-                loadAdminData();
-            } else alert('Wrong Password!');
+        <div class="mb-3">
+            <label class="small text-sub mb-1">Item Title</label>
+            <input type="text" id="item-title-input" class="form-control" placeholder="e.g. Outlook.fr Premium">
+        </div>
+
+        <div class="row g-2 mb-3">
+            <div class="col-6">
+                <label class="small text-sub mb-1">Price (৳)</label>
+                <input type="number" step="0.01" id="item-price-input" class="form-control" placeholder="0.77">
+            </div>
+            <div class="col-6">
+                <label class="small text-sub mb-1">Initial Stock Count</label>
+                <input type="number" id="item-stock-dummy" class="form-control" placeholder="0" disabled>
+            </div>
+        </div>
+
+        <button onclick="publishNewItem()" class="btn btn-green w-100 py-2">Publish Item</button>
+    </div>
+
+    <!-- Pending Deposit Requests -->
+    <div class="card-box p-4 mb-4">
+        <h6 class="fw-bold mb-3 text-success"><i class="fa-solid fa-wallet me-2"></i>Pending Deposit Requests</h6>
+        <div id="pending-deposits-list" class="small"></div>
+    </div>
+
+    <!-- Add Custom Payment Method -->
+    <div class="card-box p-4 mb-4">
+        <h6 class="fw-bold mb-3 text-info"><i class="fa-solid fa-credit-card me-2"></i>Manage Payment Numbers & Methods</h6>
+        
+        <div class="mb-3">
+            <label class="small text-sub mb-1">Method Name</label>
+            <input type="text" id="pay-method-name" class="form-control" placeholder="e.g. bKash / Nagad / Upay">
+        </div>
+        <div class="mb-3">
+            <label class="small text-sub mb-1">Send Money Number</label>
+            <input type="text" id="pay-method-num" class="form-control" placeholder="017xxxxxxxx">
+        </div>
+
+        <button onclick="savePaymentMethod()" class="btn btn-primary w-100 fw-bold py-2">Save Payment Method</button>
+    </div>
+
+    <!-- Live Stock Inventory Viewer -->
+    <div class="card-box p-4 mb-4">
+        <h6 class="fw-bold mb-3 text-white"><i class="fa-solid fa-boxes-stacked me-2"></i>Live Inventory Stock</h6>
+        <div class="table-responsive">
+            <table class="table table-dark-custom align-middle text-center mb-0 small">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Item Title</th>
+                        <th>Price</th>
+                        <th>In Stock</th>
+                    </tr>
+                </thead>
+                <tbody id="inventory-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- User Management List -->
+    <div class="card-box p-4">
+        <h6 class="fw-bold mb-3 text-info"><i class="fa-solid fa-users me-2"></i>Registered Users List</h6>
+        <div id="users-list-container" class="small"></div>
+    </div>
+
+</div>
+
+<script>
+    const ADMIN_PASS = "HABIBI@RAJU143";
+
+    function checkAdminPassword() {
+        let input = document.getElementById('admin-pass-input').value.trim();
+        if(input === ADMIN_PASS) {
+            sessionStorage.setItem('admin_unlocked', 'true');
+            document.getElementById('admin-lock-screen').style.display = 'none';
+            refreshDashboard();
+        } else {
+            alert('Incorrect Password!');
+        }
+    }
+
+    function lockPanel() {
+        sessionStorage.removeItem('admin_unlocked');
+        location.reload();
+    }
+
+    if(sessionStorage.getItem('admin_unlocked') === 'true') {
+        document.getElementById('admin-lock-screen').style.display = 'none';
+    }
+
+    function refreshDashboard() {
+        let store = JSON.parse(localStorage.getItem('app_store_data')) || {};
+        let users = JSON.parse(localStorage.getItem('app_users')) || [];
+        let deps = JSON.parse(localStorage.getItem('app_pending_deposits')) || [];
+
+        // 1. Stats Counter
+        document.getElementById('stat-users').innerText = users.length;
+        document.getElementById('stat-pending').innerText = deps.length;
+
+        let totalStockCount = 0;
+        Object.keys(store).forEach(cat => {
+            store[cat].forEach(i => {
+                if(i.mails) totalStockCount += i.mails.length;
+            });
+        });
+        document.getElementById('stat-stock').innerText = totalStockCount.toLocaleString();
+
+        // 2. Populate Item Select Box & Inventory Table
+        let stockSelect = document.getElementById('stock-item-select');
+        let catDropdown = document.getElementById('cat-dropdown');
+        let inventoryBody = document.getElementById('inventory-table-body');
+
+        stockSelect.innerHTML = '';
+        catDropdown.innerHTML = '<option value="">-- Select Existing Category --</option>';
+        inventoryBody.innerHTML = '';
+
+        let categories = Object.keys(store);
+
+        categories.forEach(cat => {
+            catDropdown.innerHTML += `<option value="${cat}">${cat}</option>`;
+            
+            store[cat].forEach(item => {
+                let count = item.mails ? item.mails.length : 0;
+                stockSelect.innerHTML += `<option value="${cat}|${item.title}">${item.title} (${cat}) - ${count} available</option>`;
+                
+                inventoryBody.innerHTML += `
+                    <tr>
+                        <td><span class="badge bg-secondary">${cat}</span></td>
+                        <td class="fw-bold">${item.title}</td>
+                        <td class="text-warning">৳${Number(item.price).toFixed(2)}</td>
+                        <td><span class="badge ${count > 0 ? 'bg-success' : 'bg-danger'}">${count} pcs</span></td>
+                    </tr>`;
+            });
+        });
+
+        // 3. Render Pending Deposits
+        renderPendingDeposits(deps);
+
+        // 4. Render Registered Users
+        renderUsersList(users);
+    }
+
+    // Function to Add or Remove User Balance
+    function modifyUserBalance(action) {
+        let email = document.getElementById('bal-user-email').value.trim();
+        let amount = Number(document.getElementById('bal-user-amount').value);
+
+        if(!email || !amount || amount <= 0) {
+            return alert('Please enter a valid user email and positive amount!');
         }
 
-        function modifyUserBalance(type) {
-            const email = document.getElementById('targetUserEmail').value.toLowerCase();
-            const amount = parseFloat(document.getElementById('targetUserAmount').value);
+        let users = JSON.parse(localStorage.getItem('app_users')) || [];
+        let uIdx = users.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
 
-            if(!email || isNaN(amount)) return alert('Enter valid Email and Amount!');
-
-            const users = JSON.parse(localStorage.getItem('asb_users')) || [];
-            const userIdx = users.findIndex(u => u.email === email);
-
-            if(userIdx === -1) return alert('User not found!');
-
-            if(type === 'add') users[userIdx].balance += amount;
-            else users[userIdx].balance = Math.max(0, users[userIdx].balance - amount);
-
-            localStorage.setItem('asb_users', JSON.stringify(users));
-            alert(`User balance updated to ৳${users[userIdx].balance}`);
-            loadAdminData();
+        if(uIdx === -1) {
+            return alert('User email not found in records!');
         }
 
-        function addCategory() {
-            const name = document.getElementById('catName').value;
-            const desc = document.getElementById('catDesc').value;
-            if(!name) return alert('Enter Category Name!');
+        let currentBal = Number(users[uIdx].balance || 0);
 
-            const categories = JSON.parse(localStorage.getItem('asb_categories')) || [];
-            categories.push({ id: Date.now(), name, desc });
-            localStorage.setItem('asb_categories', JSON.stringify(categories));
-            alert('Category Added!');
-            loadAdminData();
-        }
-
-        function addSubCategory() {
-            const parent = document.getElementById('subCatParent').value;
-            const name = document.getElementById('subCatName').value;
-            const price = parseFloat(document.getElementById('subCatPrice').value) || 0;
-            const desc = document.getElementById('subCatDesc').value;
-            const stockRaw = document.getElementById('subCatStock').value;
-            const stock = stockRaw.split('\n').filter(s => s.trim() !== '');
-
-            if(!name || !price) return alert('Enter Name and Price!');
-
-            const subCategories = JSON.parse(localStorage.getItem('asb_subcategories')) || [];
-            subCategories.push({ id: 'sub_' + Date.now(), parent, name, price, desc, stock });
-            localStorage.setItem('asb_subcategories', JSON.stringify(subCategories));
-            alert('Sub-Category & Stock Added!');
-            loadAdminData();
-        }
-
-        function addPaymentMethod() {
-            const name = document.getElementById('payName').value;
-            const type = document.getElementById('payType').value;
-            const number = document.getElementById('payNum').value;
-
-            const payments = JSON.parse(localStorage.getItem('asb_payments')) || [];
-            payments.push({ name, type, number });
-            localStorage.setItem('asb_payments', JSON.stringify(payments));
-            alert('Payment Method Added!');
-        }
-
-        function loadAdminData() {
-            const users = JSON.parse(localStorage.getItem('asb_users')) || [];
-            document.getElementById('statUsers').innerText = users.length;
-
-            const subCategories = JSON.parse(localStorage.getItem('asb_subcategories')) || [];
-            let totalStock = 0;
-            subCategories.forEach(s => totalStock += (s.stock || []).length);
-            document.getElementById('statStock').innerText = `${totalStock} pcs`;
-
-            const requests = JSON.parse(localStorage.getItem('asb_deposit_requests')) || [];
-            document.getElementById('statDeposits').innerText = requests.length;
-
-            const categories = JSON.parse(localStorage.getItem('asb_categories')) || [];
-            document.getElementById('subCatParent').innerHTML = categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
-
-            const tbody = document.getElementById('depositRequestsTable');
-            tbody.innerHTML = requests.map(r => `
-                <tr class="border-b dark:border-slate-700">
-                    <td class="p-2 font-semibold">${r.email}</td>
-                    <td class="p-2 text-blue-500 font-bold">${r.method || 'bKash'}</td>
-                    <td class="p-2 text-emerald-500 font-bold">৳${r.amount}</td>
-                    <td class="p-2 font-mono uppercase">${r.trx}</td>
-                    <td class="p-2 space-x-1">
-                        <button onclick="approveDeposit(${r.id}, '${r.email}', ${r.amount})" class="bg-emerald-600 text-white px-2 py-1 rounded">Approve</button>
-                        <button onclick="openRejectModal(${r.id})" class="bg-red-600 text-white px-2 py-1 rounded">Reject</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function approveDeposit(id, email, amount) {
-            let requests = JSON.parse(localStorage.getItem('asb_deposit_requests')) || [];
-            requests = requests.filter(r => r.id !== id);
-            localStorage.setItem('asb_deposit_requests', JSON.stringify(requests));
-
-            const users = JSON.parse(localStorage.getItem('asb_users')) || [];
-            const userIdx = users.findIndex(u => u.email === email);
-            if(userIdx !== -1) {
-                users[userIdx].balance += parseFloat(amount);
-                localStorage.setItem('asb_users', JSON.stringify(users));
+        if(action === 'add') {
+            users[uIdx].balance = currentBal + amount;
+            if(!users[uIdx].history) users[uIdx].history = [];
+            users[uIdx].history.push({
+                type: 'deposit',
+                amount: amount,
+                method: 'Added by Admin',
+                time: new Date().toLocaleTimeString()
+            });
+            alert(`Successfully Added ৳${amount} to ${email}`);
+        } else if(action === 'remove') {
+            if(amount > currentBal) {
+                return alert(`User only has ৳${currentBal}. Cannot deduct more than available balance!`);
             }
-
-            alert(`Approved ৳${amount} for ${email}`);
-            loadAdminData();
+            users[uIdx].balance = currentBal - amount;
+            if(!users[uIdx].history) users[uIdx].history = [];
+            users[uIdx].history.push({
+                type: 'deduction',
+                amount: amount,
+                method: 'Deducted by Admin',
+                time: new Date().toLocaleTimeString()
+            });
+            alert(`Successfully Deducted ৳${amount} from ${email}`);
         }
 
-        function openRejectModal(id) {
-            targetRejectId = id;
-            document.getElementById('rejectModal').classList.remove('hidden');
+        localStorage.setItem('app_users', JSON.stringify(users));
+        document.getElementById('bal-user-email').value = '';
+        document.getElementById('bal-user-amount').value = '';
+        refreshDashboard();
+    }
+
+    function quickSelectUser(email) {
+        document.getElementById('bal-user-email').value = email;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function syncCategoryInput(selectObj) {
+        if(selectObj.value) {
+            document.getElementById('cat-manual-input').value = selectObj.value;
+        }
+    }
+
+    function uploadStockMails() {
+        let selectVal = document.getElementById('stock-item-select').value;
+        let rawMails = document.getElementById('stock-mails-input').value.trim();
+
+        if(!selectVal || !rawMails) return alert('Select item and paste mail data!');
+
+        let [cat, title] = selectVal.split('|');
+        let newMails = rawMails.split('\n').map(m => m.trim()).filter(m => m.length > 0);
+
+        let store = JSON.parse(localStorage.getItem('app_store_data')) || {};
+        let item = store[cat].find(i => i.title === title);
+
+        if(item) {
+            if(!item.mails) item.mails = [];
+            item.mails.push(...newMails);
+            localStorage.setItem('app_store_data', JSON.stringify(store));
+            alert(`Added ${newMails.length} mails successfully!`);
+            document.getElementById('stock-mails-input').value = '';
+            refreshDashboard();
+        }
+    }
+
+    function publishNewItem() {
+        let cat = document.getElementById('cat-manual-input').value.trim();
+        let title = document.getElementById('item-title-input').value.trim();
+        let price = Number(document.getElementById('item-price-input').value);
+
+        if(!cat || !title || !price) return alert('Please fill in category, title and price!');
+
+        let store = JSON.parse(localStorage.getItem('app_store_data')) || {};
+        if(!store[cat]) store[cat] = [];
+
+        let existing = store[cat].find(i => i.title === title);
+        if(existing) {
+            existing.price = price;
+        } else {
+            store[cat].push({ title: title, price: price, mails: [] });
         }
 
-        function closeRejectModal() {
-            document.getElementById('rejectModal').classList.add('hidden');
+        localStorage.setItem('app_store_data', JSON.stringify(store));
+        alert('Product Item Published Successfully!');
+
+        document.getElementById('cat-manual-input').value = '';
+        document.getElementById('item-title-input').value = '';
+        document.getElementById('item-price-input').value = '';
+        refreshDashboard();
+    }
+
+    function savePaymentMethod() {
+        let name = document.getElementById('pay-method-name').value.trim().toLowerCase();
+        let num = document.getElementById('pay-method-num').value.trim();
+
+        if(!name || !num) return alert('Enter method name and phone number!');
+
+        let nums = JSON.parse(localStorage.getItem('app_pay_numbers')) || {};
+        nums[name] = num;
+
+        localStorage.setItem('app_pay_numbers', JSON.stringify(nums));
+        alert(`Payment method '${name.toUpperCase()}' saved with number ${num}!`);
+
+        document.getElementById('pay-method-name').value = '';
+        document.getElementById('pay-method-num').value = '';
+    }
+
+    function renderPendingDeposits(deps) {
+        let container = document.getElementById('pending-deposits-list');
+        container.innerHTML = '';
+
+        if(!deps.length) {
+            container.innerHTML = '<div class="text-sub text-center py-2">No pending deposit requests.</div>';
+            return;
         }
 
-        function confirmRejectDeposit() {
-            const reason = document.getElementById('rejectReasonText').value || 'Invalid Request';
-            let requests = JSON.parse(localStorage.getItem('asb_deposit_requests')) || [];
-            requests = requests.filter(r => r.id !== targetRejectId);
-            localStorage.setItem('asb_deposit_requests', JSON.stringify(requests));
+        deps.forEach((d, idx) => {
+            container.innerHTML += `
+                <div class="bg-dark p-3 rounded mb-2 d-flex justify-content-between align-items-center border-start border-4 border-warning">
+                    <div>
+                        <div class="fw-bold text-white">${d.user}</div>
+                        <div class="text-sub">TrxID: <span class="text-warning">${d.trx}</span> | Amt: <strong class="text-success">৳${d.amount}</strong></div>
+                        <div class="small text-info">${d.method || 'Added via MFS'} (${d.time})</div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button onclick="approveDeposit(${idx})" class="btn btn-sm btn-success fw-bold">Approve</button>
+                        <button onclick="rejectDeposit(${idx})" class="btn btn-sm btn-danger fw-bold">Reject</button>
+                    </div>
+                </div>`;
+        });
+    }
 
-            alert(`Request Rejected! Reason: ${reason}`);
-            closeRejectModal();
-            loadAdminData();
+    function approveDeposit(index) {
+        let deps = JSON.parse(localStorage.getItem('app_pending_deposits')) || [];
+        let req = deps[index];
+        if(!req) return;
+
+        let users = JSON.parse(localStorage.getItem('app_users')) || [];
+        let uIdx = users.findIndex(u => u.email === req.user);
+
+        if(uIdx !== -1) {
+            users[uIdx].balance = Number(users[uIdx].balance || 0) + Number(req.amount);
+            if(!users[uIdx].history) users[uIdx].history = [];
+            users[uIdx].history.push({
+                type: 'deposit',
+                amount: req.amount,
+                method: req.method || 'Added via MFS',
+                trx: req.trx,
+                time: new Date().toLocaleTimeString()
+            });
+            localStorage.setItem('app_users', JSON.stringify(users));
         }
-    </script>
+
+        deps.splice(index, 1);
+        localStorage.setItem('app_pending_deposits', JSON.stringify(deps));
+        alert('Deposit Approved Successfully!');
+        refreshDashboard();
+    }
+
+    function rejectDeposit(index) {
+        let deps = JSON.parse(localStorage.getItem('app_pending_deposits')) || [];
+        deps.splice(index, 1);
+        localStorage.setItem('app_pending_deposits', JSON.stringify(deps));
+        alert('Deposit Rejected!');
+        refreshDashboard();
+    }
+
+    function renderUsersList(users) {
+        let container = document.getElementById('users-list-container');
+        container.innerHTML = '';
+
+        if(!users.length) {
+            container.innerHTML = '<div class="text-sub text-center py-2">No registered users found.</div>';
+            return;
+        }
+
+        users.forEach(u => {
+            container.innerHTML += `
+                <div class="bg-dark p-2 px-3 rounded mb-2 d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="fw-bold text-white">${u.email}</div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-primary fs-6">৳ ${Number(u.balance || 0).toFixed(2)}</span>
+                        <button onclick="quickSelectUser('${u.email}')" class="btn btn-sm btn-outline-info"><i class="fa-solid fa-pen-to-square"></i></button>
+                    </div>
+                </div>`;
+        });
+    }
+
+    if(sessionStorage.getItem('admin_unlocked') === 'true') {
+        refreshDashboard();
+    }
+</script>
 </body>
 </html>
