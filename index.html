@@ -13,7 +13,7 @@
             --bg-body: #0b132b;
             --card-bg: #1c2541;
             --text-main: #ffffff;
-            --text-sub: #cbd5e1;
+            --text-sub: #94a3b8;
             --border-color: #3a506b;
             --input-bg: #10172a;
             --accent-blue: #3b82f6;
@@ -26,7 +26,7 @@
             background-color: var(--bg-body);
             color: var(--text-main);
             font-family: 'Poppins', sans-serif;
-            padding-bottom: 80px;
+            padding-bottom: 90px;
         }
 
         .top-navbar {
@@ -39,19 +39,90 @@
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         }
 
         .form-control, .form-select {
             background-color: var(--input-bg) !important;
             color: #ffffff !important;
             border: 1px solid var(--border-color) !important;
-            border-radius: 10px;
-            padding: 12px 14px;
+            border-radius: 12px;
+            padding: 12px 16px;
         }
 
-        .form-control::placeholder { color: #94a3b8 !important; }
+        .form-control::placeholder { color: #64748b !important; }
 
+        /* Category Tabs */
+        .category-scroll {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            scrollbar-width: none;
+        }
+        .category-scroll::-webkit-scrollbar { display: none; }
+        
+        .cat-tab-btn {
+            background: var(--input-bg);
+            color: var(--text-sub);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .cat-tab-btn.active {
+            background: var(--accent-blue);
+            color: #fff;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        /* MFS Cards */
+        .mfs-card {
+            background: var(--input-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 14px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .mfs-card:hover { border-color: var(--accent-blue); }
+        .mfs-card.selected {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.12);
+        }
+
+        /* Quantity Box */
+        .qty-box {
+            display: flex;
+            align-items: center;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .qty-box button {
+            background: #1e293b;
+            color: #fff;
+            border: none;
+            padding: 10px 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .qty-box input {
+            border: none !important;
+            text-align: center;
+            background: transparent !important;
+            color: #fff !important;
+            font-weight: bold;
+        }
+
+        /* Bottom Nav */
         .bottom-nav {
             background: var(--card-bg);
             border-top: 1px solid var(--border-color);
@@ -62,23 +133,15 @@
             z-index: 1000;
             padding: 10px 0;
         }
-
         .bottom-nav a {
             color: var(--text-sub);
             text-decoration: none;
             font-size: 12px;
             text-align: center;
+            transition: 0.2s;
         }
-
-        .bottom-nav a.active, .bottom-nav a:hover {
-            color: var(--accent-blue);
-        }
-
-        .bottom-nav i {
-            font-size: 18px;
-            display: block;
-            margin-bottom: 3px;
-        }
+        .bottom-nav a.active, .bottom-nav a:hover { color: var(--accent-blue); }
+        .bottom-nav i { font-size: 18px; display: block; margin-bottom: 3px; }
 
         .page-section { display: none; }
         .page-section.active { display: block; }
@@ -89,38 +152,41 @@
 <!-- Top Navbar -->
 <div class="top-navbar d-flex justify-content-between align-items-center">
     <h4 class="m-0 fw-bold text-primary"><i class="fa-solid fa-store me-2"></i>Mail Market</h4>
-    <div id="user-wallet-badge" class="badge bg-primary fs-6 py-2 px-3" style="display:none;">
-        ৳ <span id="nav-balance">0.00</span>
+    <div id="user-wallet-badge" class="badge bg-primary fs-6 py-2 px-3 rounded-pill shadow-sm" style="display:none;">
+        <i class="fa-solid fa-wallet me-1"></i> ৳ <span id="nav-balance">0.00</span>
     </div>
 </div>
 
 <div class="container mt-4" style="max-width: 650px;">
 
-    <!-- AUTH SECTION (Login / Register with Email & Password) -->
+    <!-- AUTH SECTION (Login / Register) -->
     <div id="auth-section" class="page-section active">
         <div class="card-box p-4 text-center">
-            <div class="mb-3">
-                <i class="fa-solid fa-lock text-primary fs-1"></i>
+            <div class="mb-3 mt-2">
+                <span class="fa-stack fa-2x text-primary">
+                    <i class="fa-solid fa-circle fa-stack-2x opacity-25"></i>
+                    <i class="fa-solid fa-lock fa-stack-1x"></i>
+                </span>
             </div>
-            <h5 class="fw-bold text-white mb-2">Welcome to Mail Market</h5>
-            <p class="text-sub small mb-4">Please login or register with email and password to access</p>
+            <h4 class="fw-bold text-white mb-2">Welcome Back</h4>
+            <p class="text-sub small mb-4">Login or register with your email and password</p>
             
             <div class="mb-3 text-start">
-                <label class="small text-sub mb-1">Email Address</label>
+                <label class="small text-sub mb-1 fw-semibold">Email Address</label>
                 <input type="email" id="auth-email" class="form-control" placeholder="user@gmail.com">
             </div>
 
             <div class="mb-4 text-start">
-                <label class="small text-sub mb-1">Password</label>
-                <input type="password" id="auth-pass" class="form-control" placeholder="Enter password">
+                <label class="small text-sub mb-1 fw-semibold">Password</label>
+                <input type="password" id="auth-pass" class="form-control" placeholder="••••••••">
             </div>
 
             <div class="row g-2">
                 <div class="col-6">
-                    <button onclick="handleAuth('login')" class="btn btn-primary w-100 fw-bold py-2">Login</button>
+                    <button onclick="handleAuth('login')" class="btn btn-primary w-100 fw-bold py-3 rounded-pill shadow">Login</button>
                 </div>
                 <div class="col-6">
-                    <button onclick="handleAuth('register')" class="btn btn-outline-light w-100 fw-bold py-2">Register</button>
+                    <button onclick="handleAuth('register')" class="btn btn-outline-light w-100 fw-bold py-3 rounded-pill">Register</button>
                 </div>
             </div>
         </div>
@@ -128,51 +194,66 @@
 
     <!-- HOME / STORE SECTION -->
     <div id="home-section" class="page-section">
-        <div class="mb-3">
-            <label class="small text-sub mb-1">Select Category</label>
-            <select id="store-cat-select" class="form-select" onchange="renderStoreItems()"></select>
-        </div>
+        <!-- Category Horizontal Scroll -->
+        <div class="category-scroll mb-4" id="cat-tabs-container"></div>
         <div id="store-items-container"></div>
     </div>
 
     <!-- DEPOSIT SECTION -->
     <div id="deposit-section" class="page-section">
         <div class="card-box p-4 mb-4">
-            <h6 class="fw-bold mb-3 text-success"><i class="fa-solid fa-wallet me-2"></i>Add Balance (Deposit)</h6>
+            <h5 class="fw-bold mb-3 text-success"><i class="fa-solid fa-wallet me-2"></i>Add Balance (Deposit)</h5>
+            <p class="text-sub small mb-4">Select your preferred payment gateway, click the number to copy, send money, and submit your TrxID.</p>
             
-            <div class="mb-3">
-                <label class="small text-sub mb-1">Select Payment Method</label>
-                <select id="deposit-method-select" class="form-select" onchange="updatePaymentNumberInfo()">
-                    <option value="">-- Choose Method --</option>
-                </select>
+            <div class="row g-3 mb-4" id="mfs-cards-container">
+                <!-- Dynamic MFS Cards -->
             </div>
 
-            <div class="alert alert-dark border border-secondary small text-sub mb-3" id="payment-instruction-box">
-                Select a payment method to view send money number.
+            <div class="alert alert-dark border border-secondary small text-white mb-4 rounded-3 p-3" id="payment-instruction-box" style="display:none;">
+                Send Money to <span id="mfs-name-tag" class="fw-bold"></span> Personal Number: 
+                <div class="mt-2 p-2 bg-black rounded border border-secondary d-flex justify-content-between align-items-center">
+                    <span id="mfs-num-tag" class="text-warning fw-bold fs-5 font-monospace"></span>
+                    <button onclick="copyActiveAgentNum()" class="btn btn-sm btn-outline-warning"><i class="fa-solid fa-copy me-1"></i> Copy</button>
+                </div>
             </div>
 
             <div class="mb-3">
-                <label class="small text-sub mb-1">Send Money TrxID / Reference</label>
+                <label class="small text-sub mb-1 fw-semibold">Transaction ID (TrxID)</label>
                 <input type="text" id="deposit-trx" class="form-control" placeholder="e.g. 9H7K3L2M1">
             </div>
 
-            <div class="mb-3">
-                <label class="small text-sub mb-1">Amount Sent (৳)</label>
+            <div class="mb-4">
+                <label class="small text-sub mb-1 fw-semibold">Amount Sent (৳)</label>
                 <input type="number" id="deposit-amount" class="form-control" placeholder="100">
             </div>
 
-            <button onclick="submitDepositRequest()" class="btn btn-success w-100 fw-bold py-2">Submit Deposit Request</button>
+            <button onclick="submitDepositRequest()" class="btn btn-success w-100 fw-bold py-3 rounded-pill shadow">Submit Deposit Request</button>
         </div>
     </div>
 
     <!-- HISTORY SECTION -->
     <div id="history-section" class="page-section">
         <div class="card-box p-4">
-            <h6 class="fw-bold mb-3 text-info"><i class="fa-solid fa-clock-rotate-left me-2"></i>Transaction & Purchase History</h6>
+            <h5 class="fw-bold mb-4 text-info"><i class="fa-solid fa-clock-rotate-left me-2"></i>Transaction & Purchase History</h5>
             <div id="user-history-list" class="small"></div>
         </div>
     </div>
 
+</div>
+
+<!-- Purchase Modal with Quantity & Copy All -->
+<div class="modal fade" id="buyModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content card-box text-white p-3 border-secondary">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-primary" id="modal-item-title">Confirm Purchase</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modal-body-content">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Bottom Navigation Bar -->
@@ -185,8 +266,12 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     let currentUser = JSON.parse(localStorage.getItem('app_current_user')) || null;
+    let selectedCategory = '';
+    let chosenMFSName = '';
+    let chosenMFSNum = '';
 
     function checkLoginState() {
         if(currentUser) {
@@ -274,72 +359,149 @@
 
     function loadStoreCategories() {
         let store = JSON.parse(localStorage.getItem('app_store_data')) || {};
-        let select = document.getElementById('store-cat-select');
-        select.innerHTML = '<option value="">-- All Categories --</option>';
+        let cats = Object.keys(store);
+        let container = document.getElementById('cat-tabs-container');
+        container.innerHTML = '';
 
-        Object.keys(store).forEach(cat => {
-            select.innerHTML += `<option value="${cat}">${cat}</option>`;
+        if(cats.length === 0) {
+            selectedCategory = '';
+            renderStoreItems();
+            return;
+        }
+
+        if(!selectedCategory || !store[selectedCategory]) {
+            selectedCategory = cats[0];
+        }
+
+        cats.forEach(cat => {
+            let activeClass = cat === selectedCategory ? 'active' : '';
+            container.innerHTML += `<button class="cat-tab-btn ${activeClass}" onclick="selectCategory('${cat}')">${cat}</button>`;
         });
+
         renderStoreItems();
+    }
+
+    function selectCategory(cat) {
+        selectedCategory = cat;
+        loadStoreCategories();
     }
 
     function renderStoreItems() {
         let store = JSON.parse(localStorage.getItem('app_store_data')) || {};
-        let selectedCat = document.getElementById('store-cat-select').value;
         let container = document.getElementById('store-items-container');
         container.innerHTML = '';
 
-        let hasItems = false;
-        Object.keys(store).forEach(cat => {
-            if(selectedCat && selectedCat !== cat) return;
-
-            store[cat].forEach((item, itemIdx) => {
-                hasItems = true;
-                let count = item.mails ? item.mails.length : 0;
-                container.innerHTML += `
-                    <div class="card-box p-3 mb-3 d-flex justify-content-between align-items-center">
-                        <div>
-                            <span class="badge bg-secondary mb-1">${cat}</span>
-                            <div class="fw-bold text-white">${item.title}</div>
-                            <div class="text-warning small">Price: ৳${Number(item.price).toFixed(2)}</div>
-                            <div class="text-sub small">In Stock: <span class="${count > 0 ? 'text-success fw-bold' : 'text-danger'}">${count} pcs</span></div>
-                        </div>
-                        <div>
-                            <button onclick="buyItem('${cat}', ${itemIdx})" class="btn btn-sm btn-primary fw-bold px-3 py-2" ${count === 0 ? 'disabled' : ''}>Buy Now</button>
-                        </div>
-                    </div>`;
-            });
-        });
-
-        if(!hasItems) {
-            container.innerHTML = '<div class="text-sub text-center py-4">No products available in this category.</div>';
+        if(!selectedCategory || !store[selectedCategory] || store[selectedCategory].length === 0) {
+            container.innerHTML = '<div class="text-sub text-center py-5">No products available in this category.</div>';
+            return;
         }
+
+        store[selectedCategory].forEach((item, itemIdx) => {
+            let count = item.mails ? item.mails.length : 0;
+            container.innerHTML += `
+                <div class="card-box p-4 mb-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="fw-bold text-white fs-6 mb-1">${item.title}</div>
+                        <div class="text-warning fw-bold mb-1">৳${Number(item.price).toFixed(2)} <span class="small text-sub fw-normal">/ per unit</span></div>
+                        <div class="small text-sub"><i class="fa-solid fa-box-archive me-1"></i>Stock: <span class="${count > 0 ? 'text-success fw-bold' : 'text-danger'}">${count} pcs available</span></div>
+                    </div>
+                    <div>
+                        <button onclick="openBuyModal('${selectedCategory}', ${itemIdx})" class="btn btn-primary fw-bold px-4 py-2 rounded-pill shadow-sm" ${count === 0 ? 'disabled' : ''}>
+                            ${count === 0 ? 'Out of Stock' : 'Buy Now'}
+                        </button>
+                    </div>
+                </div>`;
+        });
     }
 
-    function buyItem(cat, index) {
+    function openBuyModal(cat, index) {
         let store = JSON.parse(localStorage.getItem('app_store_data')) || {};
         let item = store[cat][index];
-        let price = Number(item.price);
+        let maxStock = item.mails ? item.mails.length : 0;
+        let unitPrice = Number(item.price);
 
-        if(!item.mails || item.mails.length === 0) return alert('Out of stock!');
+        document.getElementById('modal-item-title').innerText = item.title;
+        document.getElementById('modal-body-content').innerHTML = `
+            <div class="mb-3">
+                <label class="small text-sub mb-1">Unit Price</label>
+                <div class="fw-bold text-warning">৳${unitPrice.toFixed(2)}</div>
+            </div>
+            <div class="mb-3">
+                <label class="small text-sub mb-2">Select Quantity (Max: ${maxStock})</label>
+                <div class="qty-box">
+                    <button onclick="adjustQty(-1, ${maxStock})"><i class="fa-solid fa-minus"></i></button>
+                    <input type="number" id="modal-qty-input" class="form-control" value="1" min="1" max="${maxStock}" oninput="updateTotalCost(${unitPrice}, ${maxStock})">
+                    <button onclick="adjustQty(1, ${maxStock})"><i class="fa-solid fa-plus"></i></button>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="small text-sub mb-1">Total Cost</label>
+                <div class="fs-5 fw-bold text-success" id="modal-total-price">৳${unitPrice.toFixed(2)}</div>
+            </div>
+            <button onclick="confirmPurchase('${cat}', ${index})" class="btn btn-success w-100 fw-bold py-3 rounded-pill shadow">Confirm & Pay</button>
+        `;
+
+        let modal = new bootstrap.Modal(document.getElementById('buyModal'));
+        modal.show();
+    }
+
+    function adjustQty(val, maxStock) {
+        let input = document.getElementById('modal-qty-input');
+        let current = Number(input.value) || 1;
+        let store = JSON.parse(localStorage.getItem('app_store_data')) || {};
+        // find active unit price dynamically
+        let price = 0;
+        try {
+            let storeData = JSON.parse(localStorage.getItem('app_store_data')) || {};
+            // Simplified reference
+        } catch(e){}
+
+        let newQty = current + val;
+        if(newQty < 1) newQty = 1;
+        if(newQty > maxStock) newQty = maxStock;
+        input.value = newQty;
+        
+        // Trigger price update
+        let unitPriceNode = document.querySelector('#modal-body-content .text-warning');
+        // Simple recalculation based on input value
+        let currentPriceText = document.querySelector('#modal-body-content .text-warning').innerText.replace('৳','');
+        let unitPrice = Number(currentPriceText) || 0;
+        document.getElementById('modal-total-price').innerText = `৳${(unitPrice * newQty).toFixed(2)}`;
+    }
+
+    function updateTotalCost(unitPrice, maxStock) {
+        let input = document.getElementById('modal-qty-input');
+        let qty = Number(input.value) || 1;
+        if(qty > maxStock) { qty = maxStock; input.value = maxStock; }
+        if(qty < 1) { qty = 1; input.value = 1; }
+        document.getElementById('modal-total-price').innerText = `৳${(unitPrice * qty).toFixed(2)}`;
+    }
+
+    function confirmPurchase(cat, index) {
+        let qty = Number(document.getElementById('modal-qty-input').value) || 1;
+        let store = JSON.parse(localStorage.getItem('app_store_data')) || {};
+        let item = store[cat][index];
+        let totalCost = Number(item.price) * qty;
+
+        if(!item.mails || item.mails.length < qty) return alert('Not enough stock available!');
 
         let users = JSON.parse(localStorage.getItem('app_users')) || [];
         let uIdx = users.findIndex(u => u.email === currentUser.email);
 
-        if(users[uIdx].balance < price) {
-            return alert('Insufficient balance! Please deposit first.');
+        if(users[uIdx].balance < totalCost) {
+            return alert('Insufficient balance! Please deposit money first.');
         }
 
-        // Deduct balance & give mail
-        users[uIdx].balance -= price;
-        let purchasedMail = item.mails.shift(); // take one mail
+        users[uIdx].balance -= totalCost;
+        let purchasedMails = item.mails.splice(0, qty); // take requested quantity
 
         if(!users[uIdx].history) users[uIdx].history = [];
         users[uIdx].history.unshift({
             type: 'purchase',
             title: item.title,
-            price: price,
-            detail: purchasedMail,
+            qty: qty,
+            cost: totalCost,
+            mails: purchasedMails,
             time: new Date().toLocaleString()
         });
 
@@ -348,44 +510,77 @@
         
         updateUserBalanceDisplay();
         renderStoreItems();
-        alert(`Purchase Successful!\n\nMail Info: ${purchasedMail}`);
+
+        // Show Delivery with Copy All Option
+        let mailListText = purchasedMails.join('\n');
+        document.getElementById('modal-body-content').innerHTML = `
+            <div class="text-center text-success mb-3"><i class="fa-solid fa-circle-check fs-1"></i></div>
+            <h6 class="text-center fw-bold text-white mb-3">Purchase Successful! (${qty} items)</h6>
+            <textarea id="copy-mails-textarea" class="form-control mb-3 font-monospace small" rows="6" readonly>${mailListText}</textarea>
+            <button onclick="copyAllDeliveredMails()" class="btn btn-warning w-100 fw-bold py-3 rounded-pill shadow text-dark">
+                <i class="fa-solid fa-copy me-2"></i> Copy All Mails
+            </button>
+        `;
+    }
+
+    function copyAllDeliveredMails() {
+        let textarea = document.getElementById('copy-mails-textarea');
+        textarea.select();
+        navigator.clipboard.writeText(textarea.value);
+        alert('All mails copied to clipboard successfully!');
     }
 
     function loadPaymentMethods() {
         let nums = JSON.parse(localStorage.getItem('app_pay_numbers')) || {};
-        let select = document.getElementById('deposit-method-select');
-        select.innerHTML = '<option value="">-- Choose Method --</option>';
+        let container = document.getElementById('mfs-cards-container');
+        container.innerHTML = '';
+
+        if(Object.keys(nums).length === 0) {
+            container.innerHTML = '<div class="text-sub small text-center col-12">No payment methods configured by admin yet.</div>';
+            document.getElementById('payment-instruction-box').style.display = 'none';
+            return;
+        }
 
         Object.keys(nums).forEach(m => {
-            select.innerHTML += `<option value="${m}">${m.toUpperCase()} - ${nums[m]}</option>`;
+            let brandColor = m.toLowerCase() === 'bkash' ? '#e2136e' : (m.toLowerCase() === 'nagad' ? '#f7931e' : '#8a2be2');
+            container.innerHTML += `
+                <div class="col-4">
+                    <div class="mfs-card" onclick="selectPaymentMethod('${m}', '${nums[m]}', this)">
+                        <span class="fw-bold d-block text-uppercase" style="color: ${brandColor};">${m}</span>
+                        <small class="text-sub">Personal</small>
+                    </div>
+                </div>`;
         });
     }
 
-    function updatePaymentNumberInfo() {
-        let method = document.getElementById('deposit-method-select').value;
-        let nums = JSON.parse(localStorage.getItem('app_pay_numbers')) || {};
-        let box = document.getElementById('payment-instruction-box');
+    function selectPaymentMethod(name, num, element) {
+        chosenMFSName = name;
+        chosenMFSNum = num;
+        document.querySelectorAll('.mfs-card').forEach(c => c.classList.remove('selected'));
+        element.classList.add('selected');
 
-        if(method && nums[method]) {
-            box.innerHTML = `Send Money to this <strong>${method.toUpperCase()}</strong> Number: <span class="text-warning fw-bold fs-6">${nums[method]}</span> (Personal). After sending, enter your TrxID and amount below.`;
-        } else {
-            box.innerHTML = 'Select a payment method to view send money number.';
-        }
+        document.getElementById('payment-instruction-box').style.display = 'block';
+        document.getElementById('mfs-name-tag').innerText = name.toUpperCase();
+        document.getElementById('mfs-num-tag').innerText = num;
+    }
+
+    function copyActiveAgentNum() {
+        if(!chosenMFSNum) return;
+        navigator.clipboard.writeText(chosenMFSNum);
+        alert(`Copied ${chosenMFSName.toUpperCase()} Number: ${chosenMFSNum}`);
     }
 
     function submitDepositRequest() {
-        let method = document.getElementById('deposit-method-select').value;
         let trx = document.getElementById('deposit-trx').value.trim();
         let amount = Number(document.getElementById('deposit-amount').value);
 
-        if(!method || !trx || !amount || amount <= 0) {
-            return alert('Please fill all fields correctly!');
-        }
+        if(!chosenMFSName || !chosenMFSNum) return alert('Please select a payment method!');
+        if(!trx || !amount || amount <= 0) return alert('Please enter a valid TrxID and amount!');
 
         let deps = JSON.parse(localStorage.getItem('app_pending_deposits')) || [];
         deps.push({
             user: currentUser.email,
-            method: method.toUpperCase(),
+            method: chosenMFSName.toUpperCase() + ' Personal',
             trx: trx,
             amount: amount,
             time: new Date().toLocaleTimeString()
@@ -406,26 +601,31 @@
         container.innerHTML = '';
 
         if(!u || !u.history || u.history.length === 0) {
-            container.innerHTML = '<div class="text-sub text-center py-2">No transaction history found.</div>';
+            container.innerHTML = '<div class="text-sub text-center py-4">No transaction history found.</div>';
             return;
         }
 
         u.history.forEach(h => {
             if(h.type === 'purchase') {
+                let mailJoined = h.mails ? h.mails.join('\n') : '';
                 container.innerHTML += `
-                    <div class="bg-dark p-3 rounded mb-2 border-start border-4 border-success">
-                        <div class="fw-bold text-white">Bought: ${h.title}</div>
-                        <div class="text-warning">Price: ৳${h.price}</div>
-                        <div class="text-info small text-break mt-1">Data: <code>${h.detail}</code></div>
-                        <div class="text-sub small mt-1">${h.time}</div>
+                    <div class="card-box p-3 mb-3 border-start border-4 border-success">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-bold text-white">${h.title} (${h.qty} pcs)</span>
+                            <span class="text-danger fw-bold">-৳${h.cost}</span>
+                        </div>
+                        <textarea class="form-control form-control-sm bg-black text-white font-monospace small mt-2" rows="3" readonly>${mailJoined}</textarea>
+                        <div class="text-sub small mt-2"><i class="fa-regular fa-clock me-1"></i>${h.time}</div>
                     </div>`;
             } else {
                 container.innerHTML += `
-                    <div class="bg-dark p-3 rounded mb-2 border-start border-4 border-primary">
-                        <div class="fw-bold text-white">Balance Added (${h.method})</div>
-                        <div class="text-success fw-bold">+৳${h.amount}</div>
-                        ${h.trx ? `<div class="text-sub small">TrxID: ${h.trx}</div>` : ''}
-                        <div class="text-sub small mt-1">${h.time}</div>
+                    <div class="card-box p-3 mb-3 border-start border-4 border-primary">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-bold text-white">Deposit (${h.method})</span>
+                            <span class="text-success fw-bold">+৳${h.amount}</span>
+                        </div>
+                        ${h.trx ? `<div class="text-sub small font-monospace">TrxID: ${h.trx}</div>` : ''}
+                        <div class="text-sub small mt-2"><i class="fa-regular fa-clock me-1"></i>${h.time}</div>
                     </div>`;
             }
         });
