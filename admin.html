@@ -18,6 +18,18 @@
         </div>
     </div>
 
+    <!-- Reject Reason Modal -->
+    <div id="rejectModal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[110] flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl max-w-sm w-full space-y-3">
+            <h3 class="font-bold text-sm">Reason for Rejection</h3>
+            <textarea id="rejectReasonText" placeholder="Enter reason (e.g. Invalid TrxID)" class="w-full bg-gray-50 dark:bg-slate-900 border p-2 rounded-xl text-xs h-20 focus:outline-none"></textarea>
+            <div class="flex justify-end space-x-2">
+                <button onclick="closeRejectModal()" class="px-3 py-1.5 text-xs bg-gray-200 dark:bg-slate-700 rounded-lg">Cancel</button>
+                <button onclick="confirmRejectDeposit()" class="px-3 py-1.5 text-xs bg-red-600 text-white font-bold rounded-lg">Reject Request</button>
+            </div>
+        </div>
+    </div>
+
     <div id="adminContent" class="hidden">
         <header class="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-50 p-4">
             <div class="max-w-7xl mx-auto flex justify-between items-center">
@@ -28,7 +40,36 @@
 
         <main class="max-w-7xl mx-auto px-4 py-6 space-y-8">
 
-            <!-- 1. ADD MAIN CATEGORY -->
+            <!-- Summary Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-gray-200 dark:border-slate-700">
+                    <p class="text-xs text-gray-400">Total Registered Users</p>
+                    <p class="text-2xl font-extrabold text-blue-500" id="statUsers">0</p>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-gray-200 dark:border-slate-700">
+                    <p class="text-xs text-gray-400">Total Available Stock</p>
+                    <p class="text-2xl font-extrabold text-emerald-500" id="statStock">0 pcs</p>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-gray-200 dark:border-slate-700">
+                    <p class="text-xs text-gray-400">Pending Deposits</p>
+                    <p class="text-2xl font-extrabold text-amber-500" id="statDeposits">0</p>
+                </div>
+            </div>
+
+            <!-- MANUAL USER BALANCE MANAGEMENT -->
+            <section class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4">
+                <h2 class="text-md font-bold text-emerald-500">Add / Modify User Balance</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <input type="email" id="targetUserEmail" placeholder="User Registered Email" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
+                    <input type="number" id="targetUserAmount" placeholder="Amount (BDT e.g. 100)" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
+                    <div class="flex space-x-2">
+                        <button onclick="modifyUserBalance('add')" class="w-1/2 bg-emerald-600 text-white font-bold py-2 rounded-xl text-xs">Add Funds</button>
+                        <button onclick="modifyUserBalance('deduct')" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Deduct Funds</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ADD MAIN CATEGORY -->
             <section class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4">
                 <h2 class="text-md font-bold">1. Create Main Category</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -38,38 +79,39 @@
                 <button onclick="addCategory()" class="bg-blue-600 text-white font-bold px-4 py-2 rounded-xl text-xs">Add Category</button>
             </section>
 
-            <!-- 2. ADD SUB-CATEGORY & STOCK -->
+            <!-- ADD SUB-CATEGORY & STOCK -->
             <section class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4">
                 <h2 class="text-md font-bold">2. Add Sub-Category & Stock</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <select id="subCatParent" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs"></select>
-                    <input type="text" id="subCatName" placeholder="Sub-Category Name (e.g. Gmail PVA)" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
+                    <input type="text" id="subCatName" placeholder="Sub-Category Name" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
                     <input type="number" id="subCatPrice" step="0.01" placeholder="Price (BDT)" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
                 </div>
-                <textarea id="subCatDesc" placeholder="Sub-Category Description Box..." class="w-full bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs h-16"></textarea>
-                <textarea id="subCatStock" placeholder="Paste Stock Accounts (One per line e.g. email:pass)" class="w-full bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs h-24 font-mono"></textarea>
-                <button onclick="addSubCategory()" class="bg-emerald-600 text-white font-bold px-4 py-2 rounded-xl text-xs">Add Sub-Category & Stock</button>
+                <textarea id="subCatDesc" placeholder="Sub-Category Description..." class="w-full bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs h-16"></textarea>
+                <textarea id="subCatStock" placeholder="Paste Accounts List (One per line e.g. email:pass)" class="w-full bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs h-24 font-mono"></textarea>
+                <button onclick="addSubCategory()" class="bg-emerald-600 text-white font-bold px-4 py-2 rounded-xl text-xs">Upload Sub-Category & Stock</button>
             </section>
 
-            <!-- 3. ADD PAYMENT METHOD -->
+            <!-- SET PAYMENT METHOD -->
             <section class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4">
-                <h2 class="text-md font-bold">3. Set Payment Method (bKash/Nagad)</h2>
+                <h2 class="text-md font-bold">3. Set Payment Methods</h2>
                 <div class="grid grid-cols-3 gap-3">
-                    <input type="text" id="payName" placeholder="Method (e.g. bKash)" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
-                    <input type="text" id="payType" placeholder="Type (e.g. Personal)" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
-                    <input type="text" id="payNum" placeholder="Number (e.g. 01700...)" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
+                    <input type="text" id="payName" placeholder="bKash / Nagad / Rocket" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
+                    <input type="text" id="payType" placeholder="Personal / Agent" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
+                    <input type="text" id="payNum" placeholder="Phone Number" class="bg-gray-50 dark:bg-slate-900 border p-3 rounded-xl text-xs">
                 </div>
                 <button onclick="addPaymentMethod()" class="bg-purple-600 text-white font-bold px-4 py-2 rounded-xl text-xs">Save Payment Method</button>
             </section>
 
-            <!-- 4. DEPOSIT REQUESTS & APPROVAL -->
+            <!-- PENDING DEPOSITS -->
             <section class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 space-y-4">
-                <h2 class="text-md font-bold">4. Pending Deposit Requests</h2>
+                <h2 class="text-md font-bold">4. Deposit Requests</h2>
                 <div class="overflow-x-auto">
                     <table class="w-full text-xs text-left">
                         <thead>
                             <tr class="bg-gray-100 dark:bg-slate-900">
-                                <th class="p-2">User Email</th>
+                                <th class="p-2">Email</th>
+                                <th class="p-2">Method</th>
                                 <th class="p-2">Amount</th>
                                 <th class="p-2">TrxID</th>
                                 <th class="p-2">Action</th>
@@ -85,6 +127,7 @@
 
     <script>
         const ADMIN_PASSWORD = "HABIBI@RAJU143";
+        let targetRejectId = null;
 
         function checkAdminPassword() {
             if(document.getElementById('adminPassInput').value === ADMIN_PASSWORD) {
@@ -92,6 +135,25 @@
                 document.getElementById('adminContent').classList.remove('hidden');
                 loadAdminData();
             } else alert('Wrong Password!');
+        }
+
+        function modifyUserBalance(type) {
+            const email = document.getElementById('targetUserEmail').value.toLowerCase();
+            const amount = parseFloat(document.getElementById('targetUserAmount').value);
+
+            if(!email || isNaN(amount)) return alert('Enter valid Email and Amount!');
+
+            const users = JSON.parse(localStorage.getItem('asb_users')) || [];
+            const userIdx = users.findIndex(u => u.email === email);
+
+            if(userIdx === -1) return alert('User not found!');
+
+            if(type === 'add') users[userIdx].balance += amount;
+            else users[userIdx].balance = Math.max(0, users[userIdx].balance - amount);
+
+            localStorage.setItem('asb_users', JSON.stringify(users));
+            alert(`User balance updated to ৳${users[userIdx].balance}`);
+            loadAdminData();
         }
 
         function addCategory() {
@@ -120,6 +182,7 @@
             subCategories.push({ id: 'sub_' + Date.now(), parent, name, price, desc, stock });
             localStorage.setItem('asb_subcategories', JSON.stringify(subCategories));
             alert('Sub-Category & Stock Added!');
+            loadAdminData();
         }
 
         function addPaymentMethod() {
@@ -134,33 +197,68 @@
         }
 
         function loadAdminData() {
-            const categories = JSON.parse(localStorage.getItem('asb_categories')) || [];
-            const select = document.getElementById('subCatParent');
-            select.innerHTML = categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+            const users = JSON.parse(localStorage.getItem('asb_users')) || [];
+            document.getElementById('statUsers').innerText = users.length;
+
+            const subCategories = JSON.parse(localStorage.getItem('asb_subcategories')) || [];
+            let totalStock = 0;
+            subCategories.forEach(s => totalStock += (s.stock || []).length);
+            document.getElementById('statStock').innerText = `${totalStock} pcs`;
 
             const requests = JSON.parse(localStorage.getItem('asb_deposit_requests')) || [];
+            document.getElementById('statDeposits').innerText = requests.length;
+
+            const categories = JSON.parse(localStorage.getItem('asb_categories')) || [];
+            document.getElementById('subCatParent').innerHTML = categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+
             const tbody = document.getElementById('depositRequestsTable');
             tbody.innerHTML = requests.map(r => `
                 <tr class="border-b dark:border-slate-700">
-                    <td class="p-2">${r.email}</td>
+                    <td class="p-2 font-semibold">${r.email}</td>
+                    <td class="p-2 text-blue-500 font-bold">${r.method || 'bKash'}</td>
                     <td class="p-2 text-emerald-500 font-bold">৳${r.amount}</td>
-                    <td class="p-2 font-mono">${r.trx}</td>
+                    <td class="p-2 font-mono uppercase">${r.trx}</td>
                     <td class="p-2 space-x-1">
-                        <button onclick="approveDeposit(${r.id}, ${r.amount})" class="bg-emerald-600 text-white px-2 py-1 rounded">Approve</button>
+                        <button onclick="approveDeposit(${r.id}, '${r.email}', ${r.amount})" class="bg-emerald-600 text-white px-2 py-1 rounded">Approve</button>
+                        <button onclick="openRejectModal(${r.id})" class="bg-red-600 text-white px-2 py-1 rounded">Reject</button>
                     </td>
                 </tr>
             `).join('');
         }
 
-        function approveDeposit(id, amount) {
+        function approveDeposit(id, email, amount) {
             let requests = JSON.parse(localStorage.getItem('asb_deposit_requests')) || [];
             requests = requests.filter(r => r.id !== id);
             localStorage.setItem('asb_deposit_requests', JSON.stringify(requests));
 
-            let currentBal = parseFloat(localStorage.getItem('asb_user_balance')) || 0;
-            localStorage.setItem('asb_user_balance', currentBal + parseFloat(amount));
+            const users = JSON.parse(localStorage.getItem('asb_users')) || [];
+            const userIdx = users.findIndex(u => u.email === email);
+            if(userIdx !== -1) {
+                users[userIdx].balance += parseFloat(amount);
+                localStorage.setItem('asb_users', JSON.stringify(users));
+            }
 
-            alert(`Approved ৳${amount} to User Balance!`);
+            alert(`Approved ৳${amount} for ${email}`);
+            loadAdminData();
+        }
+
+        function openRejectModal(id) {
+            targetRejectId = id;
+            document.getElementById('rejectModal').classList.remove('hidden');
+        }
+
+        function closeRejectModal() {
+            document.getElementById('rejectModal').classList.add('hidden');
+        }
+
+        function confirmRejectDeposit() {
+            const reason = document.getElementById('rejectReasonText').value || 'Invalid Request';
+            let requests = JSON.parse(localStorage.getItem('asb_deposit_requests')) || [];
+            requests = requests.filter(r => r.id !== targetRejectId);
+            localStorage.setItem('asb_deposit_requests', JSON.stringify(requests));
+
+            alert(`Request Rejected! Reason: ${reason}`);
+            closeRejectModal();
             loadAdminData();
         }
     </script>
