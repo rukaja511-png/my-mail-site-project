@@ -6,12 +6,6 @@
     <title>Mail Market</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
-    <!-- Firebase SDK (Realtime Database & Auth) -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-
     <style>
         body { font-family: system-ui, -apple-system, sans-serif; background-color: #0b132b; color: #ffffff; }
         .card-bg { background-color: #1c2541; border: 1px solid #2a3859; }
@@ -27,7 +21,7 @@
         </div>
         <div class="flex items-center space-x-2">
             <div class="bg-blue-600 px-3 py-1 rounded-full font-bold text-xs flex items-center space-x-1">
-                <span>৳</span><span id="userBalance">0.00</span>
+                <span>৳</span><span id="userBalance">50.00</span>
             </div>
             <div id="navAuthBtn">
                 <button onclick="showTab('login')" class="bg-slate-800 border border-slate-700 hover:bg-slate-700 text-white font-bold text-xs px-3 py-1.5 rounded-xl">Login</button>
@@ -38,42 +32,33 @@
     <!-- Main Dynamic Content -->
     <main class="p-4 max-w-lg mx-auto">
         
-        <!-- ================= PAGE 1: HOME / SHOP ================= -->
+        <!-- HOME / SHOP -->
         <div id="page-home" class="space-y-5">
-            <!-- Categories -->
-            <div class="flex space-x-2 overflow-x-auto pb-1" id="categoryContainer">
-                <p class="text-xs text-slate-400">Loading Categories...</p>
-            </div>
+            <div class="flex space-x-2 overflow-x-auto pb-1" id="categoryContainer"></div>
+            <div class="space-y-3" id="productsContainer"></div>
 
-            <!-- Products -->
-            <div class="space-y-3" id="productsContainer">
-                <p class="text-xs text-slate-400">Loading Products...</p>
-            </div>
-
-            <!-- Live Deposits -->
             <div class="card-bg p-4 rounded-2xl space-y-3">
                 <div class="flex items-center space-x-2 text-emerald-400 font-bold text-sm">
                     <i class="fa-solid fa-wallet"></i>
                     <span>Live Deposits (Last 1 Hour)</span>
                 </div>
-                <div id="liveDeposits" class="space-y-2 text-xs text-slate-400">
-                    <p>No recent deposits in the last hour.</p>
+                <div class="space-y-2 text-xs text-slate-400">
+                    <p>sn*******40@gmail.com - Added via bKash Personal (৳25)</p>
                 </div>
             </div>
 
-            <!-- Live Purchases -->
             <div class="card-bg p-4 rounded-2xl space-y-3">
                 <div class="flex items-center space-x-2 text-cyan-400 font-bold text-sm">
                     <i class="fa-solid fa-cart-shopping"></i>
                     <span>Live Purchases (Last 1 Hour)</span>
                 </div>
-                <div id="livePurchases" class="space-y-2 text-xs text-slate-400">
+                <div class="space-y-2 text-xs text-slate-400">
                     <p>No recent purchases in the last hour.</p>
                 </div>
             </div>
         </div>
 
-        <!-- ================= PAGE 2: LOGIN / REGISTER ================= -->
+        <!-- LOGIN / REGISTER -->
         <div id="page-login" class="hidden space-y-4">
             <div class="card-bg p-5 rounded-2xl space-y-4 border border-slate-700">
                 <div class="flex border-b border-slate-700 pb-2 text-sm font-bold">
@@ -81,58 +66,43 @@
                     <button onclick="toggleAuth('register')" id="btnTabRegister" class="w-1/2 text-center text-slate-400 pb-2">Register</button>
                 </div>
 
-                <!-- Login Form -->
-                <form id="formLogin" onsubmit="handleLogin(event)" class="space-y-3">
+                <form id="formLogin" onsubmit="handleDemoLogin(event)" class="space-y-3">
                     <div>
                         <label class="text-[10px] text-slate-400">Email Address</label>
-                        <input type="email" id="loginEmail" required class="w-full bg-[#0b132b] border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none mt-1">
+                        <input type="email" required class="w-full bg-[#0b132b] border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none mt-1" value="user@gmail.com">
                     </div>
                     <div>
                         <label class="text-[10px] text-slate-400">Password</label>
-                        <input type="password" id="loginPassword" required class="w-full bg-[#0b132b] border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none mt-1">
+                        <input type="password" required class="w-full bg-[#0b132b] border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none mt-1" value="123456">
                     </div>
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-3 rounded-xl">Login to Account</button>
                 </form>
 
-                <!-- Register Form -->
-                <form id="formRegister" onsubmit="handleRegister(event)" class="space-y-3 hidden">
+                <form id="formRegister" onsubmit="handleDemoLogin(event)" class="space-y-3 hidden">
                     <div>
                         <label class="text-[10px] text-slate-400">Full Name</label>
-                        <input type="text" id="regName" required class="w-full bg-[#0b132b] border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none mt-1">
+                        <input type="text" required class="w-full bg-[#0b132b] border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none mt-1">
                     </div>
                     <div>
                         <label class="text-[10px] text-slate-400">Email Address</label>
-                        <input type="email" id="regEmail" required class="w-full bg-[#0b132b] border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none mt-1">
+                        <input type="email" required class="w-full bg-[#0b132b] border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none mt-1">
                     </div>
                     <div>
                         <label class="text-[10px] text-slate-400">Password</label>
-                        <input type="password" id="regPassword" required class="w-full bg-[#0b132b] border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none mt-1">
+                        <input type="password" required class="w-full bg-[#0b132b] border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none mt-1">
                     </div>
                     <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-3 rounded-xl">Create Account</button>
                 </form>
             </div>
         </div>
 
-        <!-- ================= PAGE 3: DEPOSIT ================= -->
+        <!-- DEPOSIT -->
         <div id="page-deposit" class="hidden space-y-4">
             <div class="card-bg p-5 rounded-2xl space-y-4">
-                <h2 class="font-bold text-sm text-center text-slate-200">Add Balance (bKash / Nagad / Rocket)</h2>
-                <div class="text-xs bg-[#0b132b] p-3 rounded-xl border border-slate-800 text-amber-300">
-                    Send Money to: <strong class="text-white font-mono">01700000000</strong> (Personal)
-                </div>
-                <form onsubmit="handleDeposit(event)" class="space-y-3">
-                    <input type="number" id="depAmount" min="10" placeholder="Amount (Min ৳10)" required class="w-full bg-[#0b132b] border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
-                    <input type="text" id="depTrx" placeholder="TrxID (e.g. B8X9K2L0)" required class="w-full bg-[#0b132b] border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none uppercase font-mono">
-                    <button type="submit" class="w-full bg-emerald-600 font-bold text-xs py-3 rounded-xl text-white">Submit Payment</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- ================= PAGE 4: HISTORY / ORDERS ================= -->
-        <div id="page-history" class="hidden space-y-3">
-            <h2 class="font-bold text-sm text-slate-200">Your Purchased Accounts</h2>
-            <div id="historyContainer" class="space-y-2">
-                <!-- Orders render here -->
+                <h2 class="font-bold text-sm text-center text-slate-200">Add Balance (bKash / Nagad)</h2>
+                <input type="number" placeholder="Amount (Min ৳10)" class="w-full bg-[#0b132b] border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
+                <input type="text" placeholder="TrxID" class="w-full bg-[#0b132b] border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
+                <button onclick="alert('Deposit request sent!'); showTab('home');" class="w-full bg-emerald-600 font-bold text-xs py-3 rounded-xl text-white">Submit Payment</button>
             </div>
         </div>
 
@@ -148,248 +118,94 @@
             <i class="fa-solid fa-wallet text-lg"></i>
             <span>Deposit</span>
         </button>
-        <button onclick="showTab('history')" class="flex flex-col items-center space-y-1 hover:text-blue-400">
+        <button onclick="alert('History Loaded')" class="flex flex-col items-center space-y-1 hover:text-blue-400">
             <i class="fa-solid fa-rotate-left text-lg"></i>
             <span>History</span>
         </button>
-        <button onclick="handleLogout()" class="flex flex-col items-center space-y-1 hover:text-red-400">
+        <button onclick="alert('Logged out'); location.reload();" class="flex flex-col items-center space-y-1 hover:text-red-400">
             <i class="fa-solid fa-power-off text-lg"></i>
             <span>Logout</span>
         </button>
     </nav>
 
     <script>
-        // -------------------------------------------------------------
-        // 1. FIREBASE CONFIGURATION (এখান তোমার Firebase Credentials বসাও)
-        // -------------------------------------------------------------
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-            projectId: "YOUR_PROJECT",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-        
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        const auth = firebase.auth();
+        const categories = ["Hotmail", "Gmail", "Vpn"];
+        const products = [
+            { id: 1, title: "Express vpn 7 Day", category: "Vpn", price: 30.00, stock: 2 },
+            { id: 2, title: "Hotmail Premium 2024", category: "Hotmail", price: 5.00, stock: 0 },
+            { id: 3, title: "HOTMAIL Trust", category: "Hotmail", price: 0.70, stock: 0 }
+        ];
 
-        let currentSelectedCat = '';
+        let selectedCat = "Vpn";
 
-        // -------------------------------------------------------------
-        // 2. AUTHENTICATION (Login / Register / Logout)
-        // -------------------------------------------------------------
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                document.getElementById('navAuthBtn').innerHTML = `<span class="text-xs text-emerald-400 font-bold">${user.email.split('@')[0]}</span>`;
-                // Listen to User Balance & History
-                db.ref('users/' + user.uid).on('value', snapshot => {
-                    const data = snapshot.val() || {};
-                    document.getElementById('userBalance').innerText = (data.balance || 0).toFixed(2);
-                    renderHistory(data.orders || []);
-                });
-            } else {
-                document.getElementById('userBalance').innerText = '0.00';
-                document.getElementById('navAuthBtn').innerHTML = `<button onclick="showTab('login')" class="bg-slate-800 border border-slate-700 text-white font-bold text-xs px-3 py-1.5 rounded-xl">Login</button>`;
-            }
-        });
-
-        function handleRegister(e) {
-            e.preventDefault();
-            const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value;
-            const pass = document.getElementById('regPassword').value;
-
-            auth.createUserWithEmailAndPassword(email, pass)
-                .then(res => {
-                    db.ref('users/' + res.user.uid).set({ name, email, balance: 0 });
-                    alert('Registration Successful!');
-                    showTab('home');
-                })
-                .catch(err => alert(err.message));
+        function renderCategories() {
+            document.getElementById('categoryContainer').innerHTML = categories.map(c => `
+                <button onclick="selectCategory('${c}')" 
+                    class="px-5 py-2 rounded-full font-bold text-xs border border-slate-700 transition ${selectedCat === c ? 'bg-blue-600 text-white' : 'bg-[#1c2541] text-slate-300'}">
+                    ${c}
+                </button>
+            `).join('');
         }
 
-        function handleLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const pass = document.getElementById('loginPassword').value;
-
-            auth.signInWithEmailAndPassword(email, pass)
-                .then(() => {
-                    alert('Logged in successfully!');
-                    showTab('home');
-                })
-                .catch(err => alert(err.message));
+        function selectCategory(c) {
+            selectedCat = c;
+            renderCategories();
+            renderProducts();
         }
 
-        function handleLogout() {
-            auth.signOut().then(() => {
-                alert('Logged out');
-                showTab('home');
-            });
-        }
+        function renderProducts() {
+            const filtered = products.filter(p => p.category === selectedCat);
+            const container = document.getElementById('productsContainer');
 
-        // -------------------------------------------------------------
-        // 3. REALTIME DATA SYNC (Categories & Products)
-        // -------------------------------------------------------------
-        function listenRealtimeData() {
-            // Categories Sync
-            db.ref('categories').on('value', snapshot => {
-                const data = snapshot.val() || {};
-                const list = Object.values(data);
-                const container = document.getElementById('categoryContainer');
-                
-                if (list.length === 0) {
-                    container.innerHTML = `<span class="text-xs text-slate-400">No categories found</span>`;
-                    return;
-                }
-
-                if(!currentSelectedCat) currentSelectedCat = list[0].name;
-
-                container.innerHTML = list.map(c => `
-                    <button onclick="selectCategory('${c.name}')" 
-                        class="px-5 py-2 rounded-full font-bold text-xs border border-slate-700 transition ${currentSelectedCat === c.name ? 'bg-blue-600 text-white' : 'bg-[#1c2541] text-slate-300'}">
-                        ${c.name}
-                    </button>
-                `).join('');
-            });
-
-            // Products Sync
-            db.ref('products').on('value', snapshot => {
-                const data = snapshot.val() || {};
-                const list = Object.entries(data);
-                const container = document.getElementById('productsContainer');
-
-                const filtered = list.filter(([key, p]) => p.category === currentSelectedCat);
-
-                if (filtered.length === 0) {
-                    container.innerHTML = `<div class="card-bg p-4 rounded-xl text-center text-xs text-slate-400">No products available in this category.</div>`;
-                    return;
-                }
-
-                container.innerHTML = filtered.map(([key, p]) => {
-                    const stockList = p.stock || [];
-                    const stockQty = stockList.length;
-                    return `
-                        <div class="card-bg p-4 rounded-2xl space-y-3">
-                            <div class="flex justify-between items-center">
-                                <h3 class="font-bold text-sm text-slate-100">${p.title}</h3>
-                                <span class="text-[10px] font-bold px-2 py-0.5 rounded ${stockQty > 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}">
-                                    ${stockQty > 0 ? 'IN STOCK' : 'OUT OF STOCK'}
-                                </span>
-                            </div>
-                            <div class="text-blue-400 font-black text-base">৳ ${parseFloat(p.price).toFixed(2)}</div>
-                            <div class="text-xs text-slate-400 flex items-center space-x-1">
-                                <i class="fa-solid fa-box text-slate-500"></i>
-                                <span>Available: <strong class="text-slate-200">${stockQty}</strong></span>
-                            </div>
-                            <button onclick="buyProduct('${key}')" ${stockQty <= 0 ? 'disabled' : ''} 
-                                class="w-full py-2.5 rounded-xl font-bold text-xs transition ${stockQty > 0 ? 'bg-blue-600 hover:bg-blue-500 text-white' : 'bg-slate-700 text-slate-400 cursor-not-allowed'}">
-                                ${stockQty > 0 ? 'Buy Now' : 'Out of Stock'}
-                            </button>
-                        </div>
-                    `;
-                }).join('');
-            });
-        }
-
-        function selectCategory(catName) {
-            currentSelectedCat = catName;
-            listenRealtimeData();
-        }
-
-        // -------------------------------------------------------------
-        // 4. BUYING & DEPOSIT LOGIC
-        // -------------------------------------------------------------
-        function buyProduct(prodKey) {
-            const user = auth.currentUser;
-            if(!user) return alert('Please Login First!');
-
-            db.ref('products/' + prodKey).once('value', snapshot => {
-                const prod = snapshot.val();
-                if(!prod || !prod.stock || prod.stock.length === 0) return alert('Out of stock!');
-
-                db.ref('users/' + user.uid).once('value', uSnap => {
-                    const userData = uSnap.val() || {};
-                    const balance = userData.balance || 0;
-
-                    if(balance < prod.price) return alert('Insufficient Balance! Please deposit.');
-
-                    // Deduct stock and balance
-                    const boughtAcc = prod.stock.shift();
-                    const newBalance = balance - prod.price;
-                    const orders = userData.orders || [];
-                    orders.push({ title: prod.title, account: boughtAcc, date: new Date().toLocaleDateString() });
-
-                    db.ref('products/' + prodKey + '/stock').set(prod.stock);
-                    db.ref('users/' + user.uid).update({ balance: newBalance, orders: orders });
-
-                    alert('Purchase Success! Check your History tab.');
-                });
-            });
-        }
-
-        function handleDeposit(e) {
-            e.preventDefault();
-            const user = auth.currentUser;
-            if(!user) return alert('Please Login First!');
-
-            const amount = parseFloat(document.getElementById('depAmount').value);
-            const trx = document.getElementById('depTrx').value.trim();
-
-            db.ref('deposits').push({
-                uid: user.uid,
-                email: user.email,
-                amount: amount,
-                trx: trx,
-                status: 'Pending'
-            });
-
-            alert('Deposit Request Submitted!');
-            document.getElementById('depAmount').value = '';
-            document.getElementById('depTrx').value = '';
-        }
-
-        function renderHistory(orders) {
-            const container = document.getElementById('historyContainer');
-            if(orders.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400">No purchases made yet.</p>`;
+            if(filtered.length === 0) {
+                container.innerHTML = `<div class="card-bg p-4 rounded-xl text-center text-xs text-slate-400">No products available.</div>`;
                 return;
             }
-            container.innerHTML = orders.map(o => `
-                <div class="card-bg p-3 rounded-xl text-xs space-y-1">
-                    <div class="flex justify-between font-bold text-blue-400">
-                        <span>${o.title}</span>
-                        <span class="text-slate-500 text-[10px]">${o.date}</span>
+
+            container.innerHTML = filtered.map(p => `
+                <div class="card-bg p-4 rounded-2xl space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-sm text-slate-100">${p.title}</h3>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded ${p.stock > 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}">
+                            ${p.stock > 0 ? 'IN STOCK' : 'OUT OF STOCK'}
+                        </span>
                     </div>
-                    <div class="bg-[#0b132b] p-2 rounded border border-slate-800 font-mono text-emerald-400 break-all select-all">${o.account}</div>
+                    <div class="text-blue-400 font-black text-base">৳ ${p.price.toFixed(2)}</div>
+                    <div class="text-xs text-slate-400 flex items-center space-x-1">
+                        <i class="fa-solid fa-box text-slate-500"></i>
+                        <span>Available: <strong class="text-slate-200">${p.stock}</strong></span>
+                    </div>
+                    <button ${p.stock <= 0 ? 'disabled' : ''} onclick="alert('Purchased Successfully!')"
+                        class="w-full py-2.5 rounded-xl font-bold text-xs transition ${p.stock > 0 ? 'bg-blue-600 hover:bg-blue-500 text-white' : 'bg-slate-700 text-slate-400 cursor-not-allowed'}">
+                        ${p.stock > 0 ? 'Buy Now' : 'Out of Stock'}
+                    </button>
                 </div>
             `).join('');
         }
 
-        // Navigation Tabs
         function showTab(tab) {
-            ['home', 'login', 'deposit', 'history'].forEach(t => document.getElementById(`page-${t}`).classList.add('hidden'));
+            ['home', 'login', 'deposit'].forEach(t => document.getElementById(`page-${t}`).classList.add('hidden'));
             document.getElementById(`page-${tab}`).classList.remove('hidden');
+        }
+
+        function handleDemoLogin(e) {
+            e.preventDefault();
+            document.getElementById('navAuthBtn').innerHTML = `<span class="text-xs text-emerald-400 font-bold">User</span>`;
+            alert("Login Successful!");
+            showTab('home');
         }
 
         function toggleAuth(type) {
             if(type === 'login') {
                 document.getElementById('formLogin').classList.remove('hidden');
                 document.getElementById('formRegister').classList.add('hidden');
-                document.getElementById('btnTabLogin').className = "w-1/2 text-center text-blue-500 border-b-2 border-blue-500 pb-2";
-                document.getElementById('btnTabRegister').className = "w-1/2 text-center text-slate-400 pb-2";
             } else {
                 document.getElementById('formLogin').classList.add('hidden');
                 document.getElementById('formRegister').classList.remove('hidden');
-                document.getElementById('btnTabRegister').className = "w-1/2 text-center text-blue-500 border-b-2 border-blue-500 pb-2";
-                document.getElementById('btnTabLogin').className = "w-1/2 text-center text-slate-400 pb-2";
             }
         }
 
-        window.onload = listenRealtimeData;
+        window.onload = () => { renderCategories(); renderProducts(); };
     </script>
 </body>
 </html>
